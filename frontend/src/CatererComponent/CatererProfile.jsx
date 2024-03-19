@@ -1,28 +1,41 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 import "../Css/signup.css";
 
 export default function CatererProfile({ user }) {
-  const [inputdata, setinputData] = useState(user);
+  // const [inputdata, setinputData] = useState(user);
+  // const [re , setre] = useState(false);
+  const [inputdata, setinputData] = useState(() => {
+    const savedData = localStorage.getItem("userData");
+    return savedData ? JSON.parse(savedData) : user;
+  });
+
+  useEffect(() => {
+    localStorage.setItem("userData", JSON.stringify(inputdata));
+  }, [inputdata]);
 
   const handledata = (e) => {
     setinputData({ ...inputdata, [e.target.name]: e.target.value || "" });
   };
- 
+
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log(inputdata);
-    try {
-      axios
-        .put("http://localhost:7000/api/updateprofile", inputdata)
-        .then((resp) => {
-          alert("Data Updated Successfully");
-        });
-    } catch (error) {
-      console.log(error);
-    }
+    // confirm("Confirm to update your profile");
+
+      try {
+        axios
+          .put("http://localhost:7000/api/updateprofile", inputdata)
+          .then((resp) => {
+            alert("Data Updated Successfully")
+          });
+        
+      } catch (error) {
+        console.log(error);
+      }
   };
+
   return (
     <div className="registration">
       <h1>Profile</h1>
@@ -37,7 +50,6 @@ export default function CatererProfile({ user }) {
         />
         <br />
 
-       
         <label>Email</label>
         <input
           type="text"
@@ -90,10 +102,10 @@ export default function CatererProfile({ user }) {
         ></textarea>
         <br />
 
-        {/* <label>Pincode</label>
-      <input type = "number" className='pin' name="pin" 
-                value={pin} onChange={(e)=>{setPin(e.target.value)}} 
-      /><br/> */}
+        <label>Pincode</label>
+      <input type = "number" className='pin' name="pincode" 
+                value={inputdata.pincode} onChange={handledata} 
+      /><br/>
 
         <label>City</label>
         <input

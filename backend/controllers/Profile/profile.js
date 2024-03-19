@@ -4,7 +4,7 @@ const updateDetailes = (req, res) => {
     console.log(req.body);
     const email = req.body.email;
     console.log(email);
-    const query = `update ${req.body.role}s set name="${req.body.name}",company="${req.body.company||""}",phone="${req.body.phone || ""}",pincode="${req.body.pincode || ""}",city="${req.body.city || ""}",state="${req.body.state || ""}" where email="${email}";`
+    const query = `update ${req.body.role}s set name="${req.body.name}",company="${req.body.company||""}",address="${req.body.address || ""}",phone="${req.body.phone || ""}",pincode="${req.body.pincode || ""}",city="${req.body.city || ""}",state="${req.body.state || ""}" where email="${email}";`
     con.query(query,  async (err, result) => {
         if (err) {
             console.log(err);

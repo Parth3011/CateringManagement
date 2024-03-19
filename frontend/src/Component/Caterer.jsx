@@ -34,9 +34,10 @@ const Caterer = () => {
 
   return (
     <div>
-      <table style={{ backgroundColor: "red",marginLeft:"35%",marginTop:"200px",borderCollapse: "collapse"}}>
+      <div style={{height:"500px",overflow:"auto"}}>
+              <table style={{ backgroundColor: "lightblue",marginLeft:"30%",marginTop:"100px",borderCollapse: "collapse"}}>
         <thead >
-          <tr>
+          <tr style={{backgroundColor:"yellow"}}>
             <td>No.</td>
             <td>Name</td>
             <td>OrderId</td>
@@ -58,12 +59,14 @@ const Caterer = () => {
             <td>{data.city}</td>
             <td>{data.state}</td>
             <td>
-              <button onClick={() => handleDelete(data.caterer_id)}>Action</button>
+              <button style={{border:"2px solid black",width:"100px",backgroundColor:"red"}}onClick={() => handleDelete(data.caterer_id)}>Delete</button>
             </td>
           </tr>
         ))}
         </tbody>
       </table>
+      </div>
+
     </div>
   );
 };
