@@ -1,0 +1,272 @@
+const { validationResult } = require("express-validator");
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const con = require("../config/dbConnection");
+
+// const {JWT_SECRET} = process.env;
+
+const randomstring = require("randomstring");
+const sendMail = require("../helpers/sendmail");
+
+const signupcustomer = (req, resp) => {
+
+    // const salt =await bcrypt.genSalt(10);
+
+    let uname = req.body.uname;
+    let email = req.body.email;
+    // let pwd = await bcrypt.hash( req.body.pwd,salt) ;
+    let pwd = req.body.pwd;
+    // const pwd = req.body.pwd;
+    let confirm = req.body.confirm;
+    let phone = req.body.phone;
+    let address = req.body.address;
+    let pin = req.body.pin;
+    let state = req.body.state;
+    let city = req.body.city;
+    // let user_type = 'customer';
+    let role = 'customer';
+
+
+
+
+
+    const sql1 = `INSERT INTO login (customer_id,email,password,role) VALUES(?,?,?,?)`;
+    // const sql1 = `INSERT INTO login (id,email,pwd) VALUES(?,?,?)`;
+    const sql = `INSERT INTO customers (name,email,password,confirmpassword,phone,address,pincode,city,state,role) VALUES(?,?,?,?,?,?,?,?,?,?)`;
+
+
+    const errors = validationResult(req);
+
+
+    if (!errors.isEmpty()) {
+        return resp.status(400).json({ errors: errors.array() });
+    }
+
+
+
+    con.query(
+        // `SELECT * FROM customers WHERE LOWER(email) = LOWER(${con.escape(
+        //     req.body.email
+        // )});`,
+        `SELECT * FROM customers WHERE LOWER(email) = LOWER(${con.escape(email)});`,
+
+        (err, result) => {
+            if (result && result.length) {
+                return resp.status(409).send({
+                    msg: "This user is already in use!"
+                });
+            }
+            // else {
+            // bcrypt.hash(pwd,10, (err, hash) => {
+            //     if (err) {
+            //         return resp.status(400).send({
+            //             msg: "Error for Hassing pwd"
+            //         });
+            //     }
+
+            else {
+
+                // email=con.escape(email);
+                // pwd = con.escape(hash);
+
+                con.query(sql, [uname, email, pwd, confirm, phone, address, pin, state, city, role], (err, data) => {
+                    if (err) {
+                        console.log(err);
+                        return resp.status(400).send({
+                            msg: err
+                        });
+                        // else {
+                        //     return resp.json({ Status: "success" });
+                        // }
+                    }
+                    else {
+                        // con.query(sql1, [data.insertId, email, pwd], (err, data) => {
+                        con.query(sql1, [data.insertId, email, pwd, role], (err, data) => {
+                            if (err) {
+                                console.log(err);
+                                return resp.status(400).send({
+                                    msg: err
+                                });
+                            }
+                            // else {
+
+                            //     let mailsubject = "Mail Verification";
+                            //     const randomToken = randomstring.generate();
+                            //     let content = '<p>Hii '+uname+', \ Please <a href="http://localhost:7000/mail-verification?token='+randomToken+' ">Verify</a> Your Mail.';
+
+                            //     sendMail(email,mailsubject,content);
+
+                            //     con.query("update customers set token=? WHERE email=?",[randomToken,email],(err,result)=>{
+                            //         if(err){
+                            //             console.log(err);
+                            //             return resp.status(400).send({
+                            //                 msg:err
+                            //             });  
+                            //         }
+                            //     });
+
+
+                            // return resp.json({ Status: "success" });
+                            return resp.status(200).send({
+                                Status: "Success",
+                                msg: "The user has been registered with us"
+                            });
+                            //  }
+                        });
+                    }
+
+                });
+
+            }
+        });
+}
+
+
+// SELECT * FROM customers WHERE LOWER(email) = LOWER(abc);
+
+// const sql1 = `INSERT INTO login (customer_id,email,pwd) VALUES(?,?,?)`;
+// const sql = `INSERT INTO customers (name,email,pwd,confirmpwd,phone,address,pincode,city,state) VALUES(?,?,?,?,?,?,?,?,?)`;
+
+//         con.query(sql, [uname, email, pwd, confirm, phone, address, pin, state, city], (err, data) => {
+//             if (err) {
+//                 console.log(err);
+//                 resp.status.json({ err: "Inserting the data error" });
+//                 // else {
+//                 //     return resp.json({ Status: "success" });
+//                 // }
+//             }
+//             else {
+//                 con.query(sql1, [data.insertId, email, pwd], (err, data) => {
+//                     if (err) {
+//                         // return resp.json({ Err: "Inserting the data error" });
+//                         console.log(err);
+//                     }
+//                     else {
+//                         return resp.json({ Status: "success" });
+//                     }
+//                 });
+//             }
+
+//         });
+//     // });
+// };
+
+
+// const verifyMail = (req,resp)=>{
+
+//     var token = req.query.token;
+
+//     con.query('SELECT * FROM users WHERE token=? LIMIT 1',token,(err,result)=>{
+
+//         if(err){
+//             console.log(err.message);
+//         }
+
+//         if(result.length > 0){
+//             con.query(`UPDATE users SET token=null, is_verified = 1 WHERE id = '${result[0].id}'
+//         `);
+
+//         return resp.render('mail-verification',{message:"Mail Verified Successfully!"});
+
+//         }
+//         else{
+//             return resp.render('404');
+//         }
+
+//     });
+
+//}
+
+
+
+const login = (req, resp) => {
+    console.log(req.body);
+    const { email, pass } = req.body;
+    // let email = req.body.email;
+    // let pwd = req.body.pwd;
+    // let pwd = (req.body.pwd,10);
+    console.log(typeof (pass));
+
+    const errors = validationResult(req);
+    // console.log(errors)
+    if (!errors.isEmpty()) {
+        return resp.status(400).json({ errors: errors.array() });
+    }
+
+
+    // Query to fetch user from login table
+    let query = `SELECT * FROM login WHERE email = ?`;
+
+
+    con.query(query, [email], async (err, result) => {
+        //if (err) throw err;
+
+
+        if (!result.length) {
+            return resp.status(401).send({
+                msg: "email or passsord is incorrect"
+            })
+        }
+        else {
+
+            let query2 = `Select * FROM ${result[0]['role']}s where email = ?`
+            console.log(query2);
+
+            if (pass === result[0]['password'] && email === result[0]['email']) {
+                // const token = jwt.sign({id:results[0]['id'],role:results[0]['role']},JWT_SECRET,{expiresIn: '1h'});
+                con.query(query2, [email], async (err, results) => {
+
+                    console.log(results[0]);
+
+                    return resp.status(200).send({
+                        msg: 'loggin',
+                        Status: "Success",
+                        // token,
+                        user: results[0]
+                    });
+
+                }
+                );
+            };
+            
+        }
+
+
+        // console.log(result[0]);
+        // console.log(pwd);
+
+        // bcrypt.compare(pwd, results[0].password), (error, isMatch)=> {
+        //   if(error){
+        //     return resp.status(400).send({
+        //       msg:error
+        //     });
+        //   }
+        //   if(isMatch){
+        //     console.log(JWT_SECRET);
+        //   }
+
+        // }
+
+        // bcrypt.hash(pwd, 10, (err, hash) => {
+        //   if (err) {
+        //       return resp.status(400).send({
+        //           msg: "Error for Hassing pwd"
+        //       });
+        //   }else{
+        //     pwd = con.escape(hash);
+        //     console.log(pwd);
+        //   }});
+
+        // console.log(results[0].password);
+        // return resp.status(401).send({
+        //     msg: "email or pwd is incorrect"
+        // })
+    });
+};
+
+
+module.exports = {
+    signupcustomer,
+    // verifyMail,
+    login
+}

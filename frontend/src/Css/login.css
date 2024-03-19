@@ -1,0 +1,90 @@
+.container
+{
+    background-image: url("https://img.freepik.com/free-vector/white-abstract-background-design_23-2148825582.jpg");
+     position:relative;
+    /*display : flex; */
+    height : 610px;
+    width : 100%;
+    border : 1px solid black;
+    /* margin : auto; */
+    /* top:70px; */
+    /* margin-top : 10px; */
+    /* margin-right: 550px;  */
+    background-color: whitesmoke;
+}
+
+
+.img{
+    width: 400px;
+    height: 600px;
+}
+
+.logo {
+    width: 40px;
+    float: left;
+    border-radius: 50%;
+    margin-top: 1px;
+    margin-left: 20px;
+  }
+
+  .log{
+    margin-left: 1300px;
+  }
+/* 
+.box{
+    margin-top: 90px;
+    margin-left: 200px;
+}
+
+.user{
+    margin-left : 300px;
+    margin-top: 50px;
+    width:400px;
+    /* padding-left:60px; 
+}
+
+.pass{
+    margin-left : 300px;
+    margin-top: 10px;
+    width:400px;
+    /* padding-left:60px; 
+}
+
+.check{
+    margin-left : 300px;
+    margin-top: 20px;
+}
+
+.login{
+    margin-left : 350px;
+    margin-top: 20px;
+    width:200px;
+    /* background-image: url("https://static.vecteezy.com/system/resources/thumbnails/023/669/545/small/abstract-gradient-pink-blue-liquid-wave-background-free-vector.jpg"); 
+}
+
+.cust{
+    margin-top: 30px;
+    margin-left: 300px;
+    width:100px;
+    height:70px;
+    padding : 10px;
+}
+
+.cater{
+    margin-left: 80px;
+    width:100px;
+    height:70px;
+    padding : 10px;
+}
+
+
+.image{
+    /* height: 720px;
+    width: 700px; 
+    position: absolute;
+    top:0;
+}
+
+.space{
+    padding-left: 10px;
+} */

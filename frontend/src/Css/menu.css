@@ -1,0 +1,73 @@
+.registration
+{
+    background-image: url("https://img.freepik.com/free-vector/white-abstract-background-design_23-2148825582.jpg");
+    /* position:relative;
+    display : flex; */
+    height : 620px;
+    width : 100%;
+    border : 1px solid black;
+    /* margin : auto;
+    top:70px;
+    margin-top : 10px;
+    margin-right: 550px;  */
+    background-color: whitesmoke;
+}
+
+
+.square{
+    margin-top: 10px;
+    margin-left: 350px;
+}
+
+.name{
+    margin-left: 60px;
+    width: 500px;
+    margin-top: 10px;
+}
+
+
+.foodname{
+    margin-left: 70px;
+    width: 500px;
+    margin-top: 5px;
+}
+
+.picture{
+    margin-left: 60px;
+    width: 500px;
+    margin-top: 5px;
+}
+
+.category{
+    margin-left: 87px;
+    width: 500px;
+    margin-top: 5px;
+}
+
+.price{
+    margin-left: 77px;
+    width: 500px;
+    margin-top: 5px;
+}
+
+.status{
+    margin-left: 110px;
+    width: 500px;
+    margin-top: 5px;
+}
+
+.desc{
+    margin-left: 73px;
+    width: 500px;
+    margin-top: 5px;
+}
+
+.add{
+    position: relative;
+    left: 250px;
+    top : 30px;
+    width:200px;
+}
+
+
+

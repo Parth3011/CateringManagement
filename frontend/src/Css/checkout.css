@@ -1,0 +1,73 @@
+.registration
+{
+    background-image: url("https://img.freepik.com/free-vector/white-abstract-background-design_23-2148825582.jpg");
+    /* position:relative;
+    display : flex; */
+    height : 620px;
+    width : 100%;
+    border : 1px solid black;
+    /* margin : auto;
+    top:70px;
+    margin-top : 20px;
+    margin-right: 550px;  */
+    background-color: whitesmoke;
+}
+
+
+.square{
+    margin-top: 70px;
+    margin-left: 350px;
+}
+
+.name{
+    margin-left: 60px;
+    width: 500px;
+    margin-top: 20px;
+}
+
+
+.time{
+    margin-left: 97px;
+    width: 500px;
+    margin-top: 20px;
+}
+
+.date{
+    margin-left: 99px;
+    width: 500px;
+    margin-top: 20px;
+}
+
+.address{
+    margin-left: 77px;
+    width: 500px;
+    margin-top: 20px;
+}
+
+.pid{
+    margin-left: 60px;
+    width: 500px;
+    margin-top: 20px;
+}
+
+.city{
+    margin-left: 107px;
+    width: 500px;
+    margin-top: 20px;
+}
+
+.state{
+    margin-left: 97px;
+    width: 500px;
+    margin-top: 20px;
+}
+
+.book{
+    position: relative;
+    left: 250px;
+    top : 30px;
+    width:200px;
+}
+
+
+

@@ -1,0 +1,95 @@
+.registration
+{
+    background-image: url("https://img.freepik.com/free-vector/white-abstract-background-design_23-2148825582.jpg");
+    /* position:relative;
+    display : flex; */
+    height : 620px;
+    width : 100%;
+    border : 1px solid black;
+    /* margin : auto;
+    top:70px;
+    margin-top : 10px;
+    margin-right: 550px;  */
+    background-color: whitesmoke;
+}
+
+
+.box{
+    margin-top: 10px;
+    margin-left: 350px;
+}
+
+.uname{
+    margin-left: 60px;
+    width: 500px;
+    margin-top: 10px;
+}
+
+
+.ownerid{
+    margin-left: 36px;
+    width: 500px;
+    margin-top: 5px;
+}
+
+.email{
+    margin-left: 93px;
+    width: 500px;
+    margin-top: 5px;
+}
+
+.company{
+    margin-left: 18px;
+    width: 500px;
+    margin-top: 5px;
+}
+
+.pwd{
+    margin-left: 67px;
+    width: 500px;
+    margin-top: 5px;
+}
+
+.confirm{
+    margin-left: 7px;
+    width: 500px;
+    margin-top: 5px;
+}
+
+.phone{
+    margin-left: 60px;
+    width: 500px;
+    margin-top: 5px;
+}
+
+.address{
+    margin-left: 77px;
+    width: 500px;
+    margin-top: 5px;
+}
+
+.pin{
+    margin-left: 77px;
+    width: 500px;
+    margin-top: 5px;
+}
+
+.city{
+    margin-left: 107px;
+    width: 500px;
+    margin-top: 5px;
+}
+
+.state{
+    margin-left: 100px;
+    width: 500px;
+    margin-top: 5px;
+}
+
+.register{
+    position: relative;
+    left: 250px;
+    top : 30px;
+    width:200px;
+}
+
