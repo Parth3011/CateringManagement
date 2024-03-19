@@ -34,6 +34,8 @@ app.use(bodyParser.json());
 // });
 
 
+console.log("hi");
+
 
 
 // const { signupcustomer,login } = require("../controllers/userController");
