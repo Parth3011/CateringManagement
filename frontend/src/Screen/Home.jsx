@@ -20,13 +20,15 @@ import CustomerOutlet from "../CustomerComponent/CustomerOutlet";
 import AdminOutlet from "../Component/adminOutlet";
 import ForgetPassword from "../Component/ForgetPassword";
 import Caterer from "../Component/Caterer";
+import Customer from "../Component/Customer";
+
 
 export default function Home() {
   const [user, setuser] = useState(null);
   
   const onlogin = (data) => {
     setuser(data);
-    console.log(user);
+    console.log(data);
   };
 
   console.log("re-rendered");
@@ -45,8 +47,8 @@ export default function Home() {
           {/* admin */}
           <Route exact path="/admin" element={<AdminOutlet />}>
             <Route path="admincaterer" element={<Caterer />} />
-            <Route path="admincustomer" element={<p>Customer</p>} />
-            <Route path="profile" element={<Profile />} />
+            <Route path="admincustomer" element={<Customer/>} />
+            <Route path="profile" element={<Profile user={user}/>} />
             <Route path="logout" element={<p>Logout</p>} />
             <Route path="*" element={<h1>404 Page</h1>} />
             <Route path="signupadmin" element={<Signup />} />

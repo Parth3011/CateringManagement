@@ -44,9 +44,10 @@ export default function Login({UserData}) {
           navigate('/caterer')
         }
         // console.log(resp.data.user.role)
+        console.log(resp.data.user);
         UserData(resp.data.user)
       })
-      .then((err) => console.log(err))
+      // .then((err) => console.log(err))
     } catch (e) {
       console.error('Error submitting form:', e);
       alert('An error occurred while submitting the form');

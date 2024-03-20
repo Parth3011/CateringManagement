@@ -4,16 +4,19 @@ import axios from "axios";
 import "../Css/signup.css";
 
 export default function CatererProfile({ user }) {
-  // const [inputdata, setinputData] = useState(user);
+  const [inputdata, setinputData] = useState(user);
   // const [re , setre] = useState(false);
-  const [inputdata, setinputData] = useState(() => {
-    const savedData = localStorage.getItem("userData");
-    return savedData ? JSON.parse(savedData) : user;
-  });
 
-  useEffect(() => {
-    localStorage.setItem("userData", JSON.stringify(inputdata));
-  }, [inputdata]);
+console.log(user);
+
+  // const [inputdata, setinputData] = useState(() => {
+  //   const savedData = localStorage.getItem("userData");
+  //   return savedData ? JSON.parse(savedData) : user;
+  // });
+
+  // useEffect(() => {
+  //   localStorage.setItem("userData", JSON.stringify(inputdata));
+  // }, [inputdata]);
 
   const handledata = (e) => {
     setinputData({ ...inputdata, [e.target.name]: e.target.value || "" });
@@ -26,7 +29,7 @@ export default function CatererProfile({ user }) {
 
       try {
         axios
-          .put("http://localhost:7000/api/updateprofile", inputdata)
+          .put("http://localhost:7000/api/updatecatererprofile", inputdata)
           .then((resp) => {
             alert("Data Updated Successfully")
           });
@@ -54,7 +57,7 @@ export default function CatererProfile({ user }) {
         <input
           type="text"
           className="email"
-          name="Email"
+          name="email"
           value={inputdata.email}
           onChange={handledata}
           disabled

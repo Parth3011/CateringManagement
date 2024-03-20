@@ -74,7 +74,9 @@ router.get("/customerdetailes",customerdetailes.getCustomerDetail);
 // router.post("/menu",upload.single('picture'),menuvalidation,menuController.menu);
 
 
+router.delete("/deletecustomer/:id",customerdetailes.deletecustomer);
 router.delete("/deletecaterer/:id",catererdetailes.deletecaterer)
 router.put('/updateprofile', profile.updateDetailes)
+router.put('/updatecatererprofile', profile.updateCatererDetailes)
 
 module.exports = router;

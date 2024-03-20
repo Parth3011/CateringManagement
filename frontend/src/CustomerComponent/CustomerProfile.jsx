@@ -6,7 +6,7 @@ export default function CustomerProfile({user}) {
       console.log(user);
     const[uname,setUname] = useState("");
     const[email,setEmail] = useState("");
-    const[company,setCompany] = useState("");
+//     const[company,setCompany] = useState("");
     const[pwd,setPwd] = useState("");
     const[phone,setPhone] = useState("");
     const[address,setAddress] = useState("");
@@ -33,10 +33,10 @@ export default function CustomerProfile({user}) {
              value={email} onChange={(e)=>{setEmail(e.target.value)}}
       /><br/>
       
-      <label>Company Name</label>
+      {/* <label>Company Name</label>
       <input type = "text" className='company' name="company" 
             value={company} onChange={(e)=>{setCompany(e.target.value)}}
-      /><br/>
+      /><br/> */}
 
       <label>Password</label>
       <input type = "password" className='pwd' name="pwd" 
