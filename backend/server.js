@@ -24,7 +24,7 @@ app.use(cors());
 
 
 
-
+app.use("/public/images",express.static("./public/images"))
 app.use("/api",userRouter);
 
 
@@ -35,9 +35,9 @@ app.listen(port, () => {
 
 
 
-let bcrypt = require('bcrypt')
-let pwd="12345";
-let pwd2="12345";
+// let bcrypt = require('bcrypt')
+// let pwd="12345";
+// let pwd2="12345";
 
 // bcrypt.genSalt(10,(err,salt)=>{
 //     bcrypt.hash(pwd,salt, (err, hash) =>{

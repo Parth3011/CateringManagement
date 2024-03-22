@@ -55,6 +55,8 @@ export default function Login({UserData}) {
   };
 
   return (
+    <div>
+      <div style={{backgroundColor:"black",height:"50px"}}>Login</div>
     <div className='container'>
       <section className="">
         <div className="">
@@ -63,7 +65,7 @@ export default function Login({UserData}) {
               <div className="card" style={{ borderRadius: "1rem" }}>
                 <div className="row g-0">
                   <div className="col-md-6 col-lg-5 d-none d-md-block">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Hopetoun_falls.jpg/800px-Hopetoun_falls.jpg"
+                    <img src="https://media.istockphoto.com/id/650655146/photo/catering-food-wedding-event-table.jpg?s=612x612&w=0&k=20&c=ATGYgW8bM_559jJ5aUNO4HlJqpkOWUmNNMMflx5kajo="
                       alt="login form" className="img" style={{ borderRadius: "1rem 0 0 1rem" }} />
                   </div>
                   <div className="col-md-6 col-lg-7 d-flex align-items-center">
@@ -97,7 +99,7 @@ export default function Login({UserData}) {
 
 
                           <p className="mb-5 pb-lg-2" style={{ color: "#393f81" }}>Don't have an account?
-                            <Link to="/signup1" style={{ color: "#393f81" }}>Register Caterer</Link>
+                            <Link to="/signup1" style={{ color: "#393f81" ,marginLeft:"10px"}}>Register Caterer</Link>
                             <Link to="/signup2" style={{ color: "#393f81", marginLeft: "33px" }}>Register Customer</Link>
                             {/* <Link to="/signupadmin" style={{ color: "#393f81", marginLeft: "33px" }}>Register admin</Link> */}
                           </p>
@@ -110,7 +112,8 @@ export default function Login({UserData}) {
           </div>
         </div>
       </section>
-      <Outlet />
+      {/* <Outlet /> */}
+    </div>
     </div>
   )
 }

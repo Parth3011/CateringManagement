@@ -8,18 +8,18 @@ exports.signupvalidation = [
 
 
 
-exports.menuvalidation = [
-    check('image').custom((value,{req}) => {
+// exports.menuvalidation = [
+//     check('image').custom((value,{req}) => {
 
-        if(req.file.mimetype == 'image/jpeg'|| req.file.mimetype == 'image/png'){
-            return true;
-        }
-        else{
-            return false;
-        }
+//         if(req.file.mimetype == 'image/jpeg'|| req.file.mimetype == 'image/png'){
+//             return true;
+//         }
+//         else{
+//             return false;
+//         }
 
-    }).withMessage("Please upload an image type PNG, JPG")
-]
+//     }).withMessage("Please upload an image type PNG, JPG")
+// ]
 
 
 exports.loginvalidation = [

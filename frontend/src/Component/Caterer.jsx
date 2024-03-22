@@ -26,7 +26,7 @@ const Caterer = () => {
         `http://localhost:7000/api/deletecaterer/${id}`
       )
       .then(() => (console.log("deleted Successfully")))
-        .then(() => (setre(prev => !prev)));
+        .then(() => (setre((prev) => !prev)));
     } catch (error) {
       console.log(error);
     }

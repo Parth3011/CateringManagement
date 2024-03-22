@@ -1,11 +1,13 @@
+
 .container
 {
     background-image: url("https://img.freepik.com/free-vector/white-abstract-background-design_23-2148825582.jpg");
      position:relative;
     /*display : flex; */
-    height : 610px;
+    height : 680px;
     width : 100%;
     border : 1px solid black;
+    margin-top: 2px;
     /* margin : auto; */
     /* top:70px; */
     /* margin-top : 10px; */
@@ -15,15 +17,16 @@
 
 
 .img{
+
     width: 400px;
-    height: 600px;
+    height: 630px;
 }
 
 .logo {
     width: 40px;
     float: left;
     border-radius: 50%;
-    margin-top: 1px;
+    margin-top: px;
     margin-left: 20px;
   }
 

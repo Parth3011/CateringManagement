@@ -21,6 +21,8 @@ import AdminOutlet from "../Component/adminOutlet";
 import ForgetPassword from "../Component/ForgetPassword";
 import Caterer from "../Component/Caterer";
 import Customer from "../Component/Customer";
+import FirstPage from "../Component/FirstPage";
+import Menus from "../CatererComponent/Menus";
 
 
 export default function Home() {
@@ -38,6 +40,7 @@ export default function Home() {
 
         {/* <Nav user={user} /> */}
         <Routes>
+          <Route path="/" element={<FirstPage/>} />
           <Route path="/login" element={<Login UserData={onlogin} />} />
           <Route path="/forgetpassword" element={<ForgetPassword/>} />
           <Route path="/signup1" element={<SignupCaterer />} />
@@ -59,7 +62,8 @@ export default function Home() {
           {/* caterer */}
 
           <Route exact path="/caterer" element={<CatererOutlet />}>
-            <Route exact path="menu" element={<CatererMenu />} />
+            <Route exact path="menu" element={<Menus />} />
+            <Route path="catererMenu" element={<CatererMenu/>}/>
             <Route path="order" element={<p>Order</p>} />
             <Route path="profile" element={<CatererProfile user={user}/>} />
             <Route path="logout" element={<p>Logout</p>} />

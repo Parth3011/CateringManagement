@@ -1,31 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect,useState } from "react";
 import axios from "axios";
 
 import "../Css/signup.css";
 
 export default function CatererProfile({ user }) {
   const [inputdata, setinputData] = useState(user);
-  // const [re , setre] = useState(false);
 
 console.log(user);
 
-  // const [inputdata, setinputData] = useState(() => {
-  //   const savedData = localStorage.getItem("userData");
-  //   return savedData ? JSON.parse(savedData) : user;
-  // });
-
-  // useEffect(() => {
-  //   localStorage.setItem("userData", JSON.stringify(inputdata));
-  // }, [inputdata]);
 
   const handledata = (e) => {
-    setinputData({ ...inputdata, [e.target.name]: e.target.value || "" });
+    setinputData({ ...inputdata, [e.target.name]: e.target.value || " " });
   };
+
 
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log(inputdata);
-    // confirm("Confirm to update your profile");
 
       try {
         axios
@@ -37,7 +28,9 @@ console.log(user);
       } catch (error) {
         console.log(error);
       }
-  };
+}
+
+
 
   return (
     <div className="registration">
@@ -73,17 +66,6 @@ console.log(user);
           onChange={handledata}
         />
         <br />
-
-        {/* <label>Password</label>
-      <input type = "text" className='pwd' name="pwd" 
-            value={pwd} onChange={(e)=>{setPwd(e.target.value)}} 
-            disabled
-      /><br/> */}
-
-        {/* <label>Confirm Password</label>
-      <input type = "password" className='confirm' name="confirm" 
-            value={confirm} onChange={(e)=>{setConfirm(e.target.value)}} 
-      /><br/> */}
 
         <label>Phone No.</label>
         <input

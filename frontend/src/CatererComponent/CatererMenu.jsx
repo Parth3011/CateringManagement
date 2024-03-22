@@ -1,63 +1,147 @@
-import React, { useState } from 'react'
-import '../Css/menu.css'
+import React, { useState } from "react";
+import "../Css/menu.css";
+import axios from "axios";
 
 export default function CatererMenu() {
+  // const [name, setName] = useState("");
+  // const [foodname, setFoodName] = useState("");
+  // const [picture, setPicture] = useState("");
+  // const [category, setCategory] = useState("");
+  // const [price, setPrice] = useState("");
+  // const [desc, setDesc] = useState("");
+  // const [status, setStatus] = useState("");
 
-    const [name, setName] = useState("");
-    const [foodname, setFoodName] = useState("");
-    const [picture, setPicture] = useState("");
-    const [category, setCategory] = useState("");
-    const [price, setPrice] = useState("");
-    const [desc, setDesc] = useState("");
-    const [status, setStatus] = useState("");
+  const data = {
+    foodname: "",
+    category: "",
+    price: "",
+    desc: "",
+    status: "",
+  };
+  const [inputdata, setinputData] = useState(data);
+  const [file, setFile] = useState("");
 
-    const handlesubmit = (event) => {
-        event.preventDefault();
-        // alert("The message is sent by "+email);
+  const handledata = (e) => {
+    setinputData({ ...inputdata, [e.target.name]: e.target.value });
+    console.log(inputdata);
+  };
+
+  const handleImageChange = (e) => {
+    setFile(e.target.files[0]);
+    console.log(file);
+  };
+
+  const handlesubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const formData = new FormData();
+      formData.append("picture", file);
+      formData.append("foodname", inputdata.foodname);
+      formData.append("category", inputdata.category);
+      formData.append("price", inputdata.price);
+      formData.append("status", inputdata.status);
+      formData.append("desc", inputdata.desc);
+
+      const config = {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      };
+
+      console.log(formData);
+      const resp = await axios.post(
+        "http://localhost:7000/api/menu",
+        formData,
+        config
+      );
+      console.log(resp);
+    } catch (e) {
+      console.error("Error submitting form:", e);
+      alert("An error occurred while submitting the form");
     }
+  };
 
-    return (
-        <div className='registration'>
-            <h1>Menu</h1>
-            <div className='square'>
-                <label>CatererName</label>
-                <input type="text" className='name' name="name"
-                    value={name} onChange={(e) => { setName(e.target.value) }}
-                /><br />
+  return (
+    <div className="registration">
+      <h1>Menu</h1>
+      <div className="square">
+        {/* <label>CatererName</label>
+        <input
+          type="text"
+          className="name"
+          name="name"
+          value={inputdata.name}
+          onChange={handledata}
+        />
+        <br /> */}
 
+        <label>Food Name</label>
+        <input
+          type="text"
+          className="foodname"
+          name="foodname"
+          value={inputdata.foodname}
+          onChange={handledata}
+        />
+        <br />
 
+        <label>Picture Food</label>
+        <input
+          type="file"
+          className="picture"
+          name="picture"
+          onChange={handleImageChange}
+        />
+        <br />
 
-                <label>Food Name</label>
-                <input type="text" className='foodname' name="foodname"
-                    value={foodname} onChange={(e) => { setFoodName(e.target.value) }}
-                /><br />
+        <label>Category</label>
+        <input
+          type="text"
+          className="category"
+          name="category"
+          value={inputdata.category}
+          onChange={handledata}
+        />
+        <br />
 
-                <label>Picture Food</label>
-                <input type="file" className='picture' name="picture"
-                    value={picture} onChange={(e) => { setPicture(e.target.value) }}
-                /><br />
+        <label>Food Price</label>
+        <input
+          type="number"
+          className="price"
+          name="price"
+          value={inputdata.price}
+          onChange={handledata}
+        />
+        <br />
 
-                <label>Category</label>
-                <input type="text" className='category' name="category"
-                    value={category} onChange={(e) => { setCategory(e.target.value) }}
-                /><br />
+        <label>status</label>
+        <input
+          type="text"
+          className="status"
+          name="status"
+          value={inputdata.status}
+          onChange={handledata}
+        />
+        <br />
 
+        <label>Description</label>
+        <textarea
+          className="desc"
+          rows="1"
+          name="desc"
+          value={inputdata.desc}
+          onChange={handledata}
+        ></textarea>
+        <br />
 
-                <label>Food Price</label>
-                <input type="number" className='price' name="price"
-                    value={price} onChange={(e) => { setPrice(e.target.value) }}
-                /><br />
-
-                <label>status</label>
-                <input type="text" className='status' name="status"
-                    value={status} onChange={(e) => { setStatus(e.target.value) }}
-                /><br />
-
-                <label>Description</label>
-                <textarea className='desc' rows="1" name="desc" value={desc} onChange={(e) => { setDesc(e.target.value) }}></textarea><br />
-
-                <input type="submit" className="add bg-success" value="Add" onClick={handlesubmit} />
-            </div>
-        </div>
-    )
+        <input
+          type="submit"
+          className="add bg-success"
+          value="Add"
+          encType="multipart/form-data"
+          onClick={handlesubmit}
+        />
+      </div>
+    </div>
+  );
 }
