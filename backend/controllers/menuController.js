@@ -72,10 +72,55 @@ const deletemenu = (req, res) => {
 
 
 
+      
+const updatemenu = (req, res) => {
+    const id = parseInt(req.params.id);
+
+    const { foodname, category, price, desc, status } = req.body;
+    const { filename } = req.file;  
+  
+    const sql = `UPDATE FROM menus SET foodname="${foodname}",picture="${filename}",foodname="${foodname}",picture="${filename}" WHERE id = "${id}";`
+    console.log(id);
+    console.log(typeof (id));
+ 
+        // console.log('Data deleted successfully');
+        con.query(sql, (err, result) => {
+          if (err) {
+            console.error('Error Updating data: ', err);
+            res.status(500).json({ error: 'Updating data' });
+          } else {
+            console.log('Data Updaing successfully');
+            res.status(200).json({ message: 'Data Updating successfully' });
+            // res.redirect('/catererdetailes');
+          }
+        });
+      }
+
+
+      const getmenu1 = (req, res) => {
+        const id =  parseInt(req.params.id);
+        try {
+            con.query(`SELECT * FROM menus WHERE id=?`,id ,(err, result) => {
+                if (err) {
+                    console.log(err);
+                } else {
+                    console.log("data get");
+                    res.status(200).json({ status: 200, data: result[0] });
+                }
+            })
+        }
+        catch (err) {
+            res.status(400).json({ status: 400, message: "This is my error" })
+        }
+    }
+
+
 module.exports = {
     menu,
     getmenu,
-    deletemenu
+    deletemenu,
+    updatemenu,
+    getmenu1
 }
 
 

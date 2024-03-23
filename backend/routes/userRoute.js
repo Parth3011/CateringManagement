@@ -79,9 +79,12 @@ router.get("/catererdetailes", catererdetailes.getCatererDetail);
 router.get("/customerdetailes", customerdetailes.getCustomerDetail);
 
 
+  // caterermenu
 router.post("/menu", upload.single("picture"), menuController.menu);
 router.get("/getmenu",menuController.getmenu);
 router.delete("/deletemenu/:id",menuController.deletemenu);
+router.put("/updatemenu/:id",upload.single("picture"),menuController.updatemenu);
+router.get("/getmenu1/:id",menuController.getmenu1);
 
 
 router.delete("/deletecustomer/:id", customerdetailes.deletecustomer);

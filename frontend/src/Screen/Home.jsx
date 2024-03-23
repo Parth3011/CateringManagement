@@ -23,7 +23,8 @@ import Caterer from "../Component/Caterer";
 import Customer from "../Component/Customer";
 import FirstPage from "../Component/FirstPage";
 import Menus from "../CatererComponent/menus";
-import LogoutOutlet from "../Component/Logout";
+import UpdateMenu from "../CatererComponent/UpdateMenu";
+// import LogoutOutlet from "../Component/Logout";
 
 
 export default function Home() {
@@ -74,10 +75,11 @@ export default function Home() {
 
           <Route exact path="/caterer" element={<CatererOutlet />}>
             <Route exact path="menu" element={<Menus />} />
+            <Route path="UpdateMenu/:id" element={<UpdateMenu />} />
             <Route path="catererMenu" element={<CatererMenu/>}/>
             <Route path="order" element={<p>Order</p>} />
             <Route path="profile" element={<CatererProfile user={user}/>} />
-            <Route path="logout" element={<LogoutOutlet/>} />
+            <Route path="logout" element={<p>Logout</p>} />
             <Route path="*" element={<h1>404 Page</h1>} />
           </Route>
 

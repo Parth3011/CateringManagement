@@ -46,9 +46,9 @@ const Menus = () => {
   }
   const navigate = useNavigate();
 
-  const handleUpdate = async () =>{
+  const handleUpdate = async (id) =>{
     try{
-        navigate("/caterer/catererMenu");
+        navigate(`/caterer/UpdateMenu/${id}`);
     }
     catch(err){
         console.log(err);
@@ -61,9 +61,10 @@ const Menus = () => {
               <table style={{ backgroundColor: "lightblue",marginLeft:"30%",marginTop:"100px",borderCollapse: "collapse"}}>
         <thead>
           <tr style={{backgroundColor:"black"}}>
-            <td style={{color:"white",textAlign:"center"}}>No.</td>
+            {/* <td style={{color:"white",textAlign:"center"}}>No.</td> */}
             <td style={{color:"white",textAlign:"center"}}>Picture</td>
             <td style={{color:"white",textAlign:"center"}}>foodname</td>
+            <td style={{color:"white",textAlign:"center"}}>Category</td>
             <td style={{color:"white",textAlign:"center"}}>price</td>
             <td style={{color:"white",textAlign:"center"}}>description</td>
             <td style={{color:"white",textAlign:"center"}}>status</td>
