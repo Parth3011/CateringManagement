@@ -55,6 +55,15 @@ const Menus = () => {
     }
   }
 
+  const handleAdd = async () =>{
+    try{
+      navigate('/caterer/catererMenu')
+    }
+    catch(err){
+      console.log(err);
+    }
+  }
+
   return (
     <div>
       <div style={{height:"500px",overflow:"auto"}}>
@@ -90,6 +99,7 @@ const Menus = () => {
         ))}
         </tbody>
       </table>
+      <button style={{border:"2px solid black",width:"100px",backgroundColor:"green",marginLeft:"800px",marginTop:"10px"}}onClick={handleAdd}>Modify</button>
       </div>
 
     </div>

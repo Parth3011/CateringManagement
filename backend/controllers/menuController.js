@@ -73,28 +73,28 @@ const deletemenu = (req, res) => {
 
 
       
-const updatemenu = (req, res) => {
-    const id = parseInt(req.params.id);
-
-    const { foodname, category, price, desc, status } = req.body;
-    const { filename } = req.file;  
-  
-    const sql = `UPDATE FROM menus SET foodname="${foodname}",picture="${filename}",foodname="${foodname}",picture="${filename}" WHERE id = "${id}";`
-    console.log(id);
-    console.log(typeof (id));
- 
-        // console.log('Data deleted successfully');
+      const updatemenu = (req, res) => {
+        const id = parseInt(req.params.id);
+    
+        const { foodname, category, price, description, status } = req.body;
+        const { filename } = req.file;  
+    
+        console.log(req.body);
+        console.log(req.params.id);
+        const sql = `UPDATE menus SET foodname="${foodname}", picture="${filename}", category="${category}", price="${price}", description="${description}", status="${status}" WHERE id = ${id};`;
+        console.log(sql);
+     
         con.query(sql, (err, result) => {
-          if (err) {
-            console.error('Error Updating data: ', err);
-            res.status(500).json({ error: 'Updating data' });
-          } else {
-            console.log('Data Updaing successfully');
-            res.status(200).json({ message: 'Data Updating successfully' });
-            // res.redirect('/catererdetailes');
-          }
+            if (err) {
+                console.error('Error Updating data: ', err);
+                res.status(500).json({ error: 'Error updating data' });
+            } else {
+                console.log('Data updating successfully');
+                res.status(200).json({ message: 'Data updating successfully' });
+            }
         });
-      }
+    }
+    
 
 
       const getmenu1 = (req, res) => {

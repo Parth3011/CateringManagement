@@ -54,6 +54,7 @@ export default function CatererMenu() {
         formData,
         config
       );
+      alert("Successfully Added");
       console.log(resp);
     } catch (e) {
       console.error("Error submitting form:", e);

@@ -6,6 +6,7 @@ import "../Css/menu.css";
 const UpdateMenu = () => {
   const { id } = useParams();
   const [menuItem, setMenuItem] = useState(null);
+  const [file, setFile] = useState("");
 
   useEffect(() => {
     const fetchMenuItem = async () => {
@@ -33,13 +34,37 @@ const UpdateMenu = () => {
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleImageChange = (e) => {
+    setFile(e.target.files[0]);
+    console.log(file);
+  };
+
+  const handleSubmit = async () => {
+    // id.preventDefault();
     try {
-      // Make API call to update menu item with updated menuItem state
-      // Example:
-      // await axios.put(`http://localhost:7000/api/updateMenu/${id}`, menuItem);
-      console.log("Menu item updated successfully!");
+        const formData = new FormData();
+        formData.append("picture", file);
+        formData.append("foodname", menuItem.foodname);
+        formData.append("category", menuItem.category);
+        formData.append("price", menuItem.price);
+        formData.append("status", menuItem.status);
+        formData.append("description", menuItem.description);
+  
+        const config = {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        };
+  
+        console.log(formData);
+          await axios.put(
+          `http://localhost:7000/api/updatemenu/${id}`,
+          formData,
+          config
+        )
+      .then((resp) => {
+        alert("Data Updated Successfully")
+      })
     } catch (error) {
       console.log(error);
     }
@@ -48,7 +73,7 @@ const UpdateMenu = () => {
   return (
     <div style={{ backgroundColor: "yellow" }}>
       {menuItem && (
-        <form style={{ marginTop: "50px" }} onSubmit={handleSubmit}>
+        <form style={{ marginTop: "50px" }}>
           <label>Food Name</label>
           <input
             type="text"
@@ -59,12 +84,13 @@ const UpdateMenu = () => {
           />
           <br />
 
+
           <label>Picture Food</label>
           <input
             type="file"
             className="picture"
             name="picture"
-            onChange={handleDataChange}
+            onChange={handleImageChange}
           />
           <br />
 
@@ -108,7 +134,7 @@ const UpdateMenu = () => {
           ></textarea>
           <br />
 
-          <button type="submit" style={{ backgroundColor: "green", marginTop: "30px", marginLeft: "300px" }}>Update</button>
+          <button type="submit" style={{ backgroundColor: "green", marginTop: "30px", marginLeft: "300px" }} onClick={handleSubmit}>Update</button>
         </form>
       )}
     </div>
