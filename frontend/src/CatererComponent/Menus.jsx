@@ -31,17 +31,19 @@ const Menus = () => {
 
 
 
-//   const handleDelete = async (id) => {
-//     try {
-//       await axios.delete(
-//         `http://localhost:7000/api/deletecaterer/${id}`
-//       )
-//       .then(() => (console.log("deleted Successfully")))
-//         .then(() => (setre((prev) => !prev)));
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   }
+  const handleDelete = async (id) => {
+    const confirmdelete =  window.confirm("Are you sure you want to delete?");
+    try {
+      if(confirmdelete){
+      await axios.delete(
+        `http://localhost:7000/api/deletemenu/${id}`
+      )
+      .then(() => (console.log("deleted Successfully")))
+        .then(() => (setre((prev) => !prev)));}
+    } catch (error) {
+      console.log(error);
+    }
+  }
   const navigate = useNavigate();
 
   const handleUpdate = async () =>{
@@ -57,15 +59,15 @@ const Menus = () => {
     <div>
       <div style={{height:"500px",overflow:"auto"}}>
               <table style={{ backgroundColor: "lightblue",marginLeft:"30%",marginTop:"100px",borderCollapse: "collapse"}}>
-        <thead >
-          <tr style={{backgroundColor:"yellow"}}>
-            <td>No.</td>
-            <td>Picture</td>
-            <td>foodname</td>
-            <td>price</td>
-            <td>description</td>
-            <td>status</td>
-            <td>Action</td>
+        <thead>
+          <tr style={{backgroundColor:"black"}}>
+            <td style={{color:"white",textAlign:"center"}}>No.</td>
+            <td style={{color:"white",textAlign:"center"}}>Picture</td>
+            <td style={{color:"white",textAlign:"center"}}>foodname</td>
+            <td style={{color:"white",textAlign:"center"}}>price</td>
+            <td style={{color:"white",textAlign:"center"}}>description</td>
+            <td style={{color:"white",textAlign:"center"}}>status</td>
+            <td style={{color:"white",textAlign:"center"}}>Action</td>
           </tr>
         </thead>
         <tbody>
@@ -80,8 +82,8 @@ const Menus = () => {
             <td>{data.description}</td>
             <td>{data.status}</td>
             <td>
-              {/* <button style={{border:"2px solid black",width:"100px",backgroundColor:"red"}}onClick={() => handleDelete(data.menu_id)}>Delete</button> */}
-              <button style={{border:"2px solid black",width:"100px",backgroundColor:"blue"}}onClick={() => handleUpdate(data.menu_id)}>Update</button>
+              <button style={{border:"2px solid black",width:"100px",backgroundColor:"red"}}onClick={() => handleDelete(data.id)}>Delete</button> 
+              <button style={{marginLeft:"5px",border:"2px solid black",width:"100px",backgroundColor:"blue"}}onClick={() => handleUpdate(data.id)}>Update</button>
             </td>
           </tr>
         ))}

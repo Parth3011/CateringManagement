@@ -21,12 +21,14 @@ const Caterer = () => {
   }, [re]);
 
   const handleDelete = async (id) => {
+    const confirmdelete = window.confirm("Are you sure you want to delete?");
     try {
+      if(confirmdelete){
       await axios.delete(
         `http://localhost:7000/api/deletecustomer/${id}`
       )
       .then(() => (console.log("deleted Successfully")))
-        .then(() => (setre(prev => !prev)));
+        .then(() => (setre(prev => !prev)));}
     } catch (error) {
       console.log(error);
     }

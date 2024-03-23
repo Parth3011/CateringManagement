@@ -6,23 +6,29 @@ import "../Css/signup.css";
 export default function CatererProfile({ user }) {
   const [inputdata, setinputData] = useState(user);
 
-console.log(user);
 
 
   const handledata = (e) => {
     setinputData({ ...inputdata, [e.target.name]: e.target.value || " " });
   };
 
+  // useEffect(() => {
+  //   const storedUserData = localStorage.getItem("userData");
+  //   if (storedUserData) {
+  //     setinputData(JSON.parse(storedUserData));
+  //   }
+  // }, []);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(inputdata);
+    // console.log(inputdata);
 
       try {
         axios
           .put("http://localhost:7000/api/updatecatererprofile", inputdata)
           .then((resp) => {
-            alert("Data Updated Successfully")
+            alert("Data Updated Successfully");
+            // localStorage.setItem("userData", JSON.stringify(inputdata));
           });
         
       } catch (error) {

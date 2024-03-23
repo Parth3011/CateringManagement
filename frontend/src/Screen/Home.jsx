@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import Login from "../Component/Login";
 import { BrowserRouter, Routes, Route} from "react-router-dom";
@@ -22,18 +22,28 @@ import ForgetPassword from "../Component/ForgetPassword";
 import Caterer from "../Component/Caterer";
 import Customer from "../Component/Customer";
 import FirstPage from "../Component/FirstPage";
-import Menus from "../CatererComponent/Menus";
+import Menus from "../CatererComponent/menus";
+import LogoutOutlet from "../Component/Logout";
 
 
 export default function Home() {
   const [user, setuser] = useState(null);
+  console.log(user);
+
+  useEffect(() => {
+    // Check if user is not null before logging
+    if (user !== null) {
+      console.log("User state changed:", user);
+    }
+  }, [user]);
   
+
   const onlogin = (data) => {
     setuser(data);
-    console.log(data);
+    console.log("Hello"+data);
   };
 
-  console.log("re-rendered");
+  // console.log("re-rendered");
   return (
     <div>
       <BrowserRouter>
@@ -46,6 +56,7 @@ export default function Home() {
           <Route path="/signup1" element={<SignupCaterer />} />
           <Route path="/signup2" element={<SignupCustomer />} />
           {/* <Route path="signupadmin" element={<Signup />} /> */}
+
 
           {/* admin */}
           <Route exact path="/admin" element={<AdminOutlet />}>
@@ -66,16 +77,17 @@ export default function Home() {
             <Route path="catererMenu" element={<CatererMenu/>}/>
             <Route path="order" element={<p>Order</p>} />
             <Route path="profile" element={<CatererProfile user={user}/>} />
-            <Route path="logout" element={<p>Logout</p>} />
+            <Route path="logout" element={<LogoutOutlet/>} />
             <Route path="*" element={<h1>404 Page</h1>} />
           </Route>
+
+          {/* customer */}
 
           <Route  exact path="/customer" element={<CustomerOutlet />}>
             <Route path="menu" element={<p>Menu</p>} />
             <Route path="cart" element={<Checkout />} />
             <Route path="profile" element={<CustomerProfile user={user} />} />
             <Route path="logout" element={<p>Logout</p>} />
-
             <Route path="*" element={<h1>404 Page</h1>} />
           </Route>
         </Routes>

@@ -1,9 +1,18 @@
 import React from 'react'
 import '../Css/navbar.css'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 
 export default function NavCaterer() {
+
+    const navigate = useNavigate();
+
+    const handlelogout = ()=>{
+        const out = window.confirm("Are you sure want to logout?");
+        if(out){
+            navigate("/login")
+        }
+    }
     // console.log("in navcterer");
     return (
         <div>
@@ -37,7 +46,7 @@ export default function NavCaterer() {
                                 <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
                                     <li><Link className="dropdown-item" to="/caterer/profile"><i className="fas fa-sliders-h fa-fw"></i> Profile</Link></li>
                                     <li><hr className="dropdown-divider" /></li>
-                                    <li><Link className="dropdown-item" to="/caterer/logout"><i className="fas fa-sign-out-alt fa-fw"></i>Log Out</Link></li>
+                                    <li><Link className="dropdown-item" to="/caterer/logout" onClick={handlelogout}><i className="fas fa-sign-out-alt fa-fw"></i>Log Out</Link></li>
                                 </ul>
                             </li>
                         </ul>

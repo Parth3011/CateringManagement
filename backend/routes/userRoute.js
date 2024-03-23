@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 
-const { menuvalidation } = require("../helpers/validation");
+// const { menuvalidation } = require("../helpers/validation");
 
 
 const path = require('path');
@@ -81,6 +81,7 @@ router.get("/customerdetailes", customerdetailes.getCustomerDetail);
 
 router.post("/menu", upload.single("picture"), menuController.menu);
 router.get("/getmenu",menuController.getmenu);
+router.delete("/deletemenu/:id",menuController.deletemenu);
 
 
 router.delete("/deletecustomer/:id", customerdetailes.deletecustomer);

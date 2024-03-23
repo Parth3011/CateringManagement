@@ -1,10 +1,11 @@
 table {
     /* width: 100%; */
 }
-thead, td {
-    border: 3px solid black;
+
+thead,td {
+    border: 1px solid black;
     padding: 8px;
-    text-align: left;
+    /* text-align: left; */
 }
 th {
     background-color: #f2f2f2;
@@ -15,4 +16,8 @@ th {
     width: 70px;
     height: 70px;
     border: 2px solid black;
+}
+
+.backbox{
+    
 }

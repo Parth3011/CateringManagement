@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, Outlet, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import '../Css/login.css';
 // import { useEffect } from 'react';
 
@@ -45,7 +45,8 @@ export default function Login({UserData}) {
         }
         // console.log(resp.data.user.role)
         console.log(resp.data.user);
-        UserData(resp.data.user)
+        UserData(resp.data.user);
+        console.log(resp.data.user);
       })
       // .then((err) => console.log(err))
     } catch (e) {

@@ -49,9 +49,33 @@ const getmenu = (req, res) => {
 
 
 
+const deletemenu = (req, res) => {
+    const id = parseInt(req.params.id);
+  
+    const sql = 'DELETE FROM menus WHERE id = ?';
+    console.log(id);
+    console.log(typeof (id));
+ 
+        // console.log('Data deleted successfully');
+        con.query(sql, id, (err, result) => {
+          if (err) {
+            console.error('Error deleting data: ', err);
+            res.status(500).json({ error: 'Error deleting data' });
+          } else {
+            console.log('Data deleted successfully');
+            res.status(200).json({ message: 'Data deleted successfully' });
+            // res.redirect('/catererdetailes');
+          }
+        });
+      }
+   
+
+
+
 module.exports = {
     menu,
-    getmenu
+    getmenu,
+    deletemenu
 }
 
 
