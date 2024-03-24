@@ -25,6 +25,8 @@ import FirstPage from "../Component/FirstPage";
 import Menus from "../CatererComponent/menus";
 import UpdateMenu from "../CatererComponent/UpdateMenu";
 import AdminHome from "../Component/AdminHome";
+import CatererHome from "../CatererComponent/CatererHome";
+import CustomerHome from "../CustomerComponent/CustomerHome";
 // import LogoutOutlet from "../Component/Logout";
 
 
@@ -96,7 +98,7 @@ export default function Home() {
           {/* caterer */}
 
           <Route path="/caterer" element={<CatererOutlet />}>
-            <Route path="home" element={<p>Home Page</p>} />
+            <Route path="home" element={<CatererHome user={user}/>} />
             <Route path="menu" element={<Menus />} />
             <Route path="UpdateMenu/:id" element={<UpdateMenu />} />
             <Route path="catererMenu" element={<CatererMenu/>}/>
@@ -109,7 +111,7 @@ export default function Home() {
           {/* customer */}
 
           <Route path="/customer" element={<CustomerOutlet />}>
-            <Route path="home" element={<p>Home Page</p>} />  
+            <Route path="home" element={<CustomerHome user={user}/>} />  
             <Route path="menu" element={<p>Menu</p>} />
             <Route path="cart" element={<Checkout />} />
             <Route path="profile" element={<CustomerProfile user={user} onUpdateProfile={onUpdateProfile}/>} />
