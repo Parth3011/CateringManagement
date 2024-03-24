@@ -1,19 +1,10 @@
 import React from 'react'
 import '../Css/navbar.css'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 
 export default function NavCaterer() {
 
-    const navigate = useNavigate();
-
-    const handlelogout = ()=>{
-        const out = window.confirm("Are you sure want to logout?");
-        if(out){
-            navigate("/login")
-        }
-    }
-    // console.log("in navcterer");
     return (
         <div>
             
@@ -26,8 +17,13 @@ export default function NavCaterer() {
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                             <li className="nav-item">
-                                <Link className="nav-link active mx-5" aria-current="page" to="/caterer">Home</Link>
+                                <Link className="nav-link active mx-5" aria-current="page" to="/caterer"></Link>
                             </li>
+
+                            <li className="nav-item">
+                                <Link className="nav-link active mx-5" to="/caterer/home">Home</Link>
+                            </li>
+
                             <li className="nav-item">
                                 <Link className="nav-link active mx-5" to="/caterer/menu">Menu</Link>
                             </li>
@@ -46,7 +42,7 @@ export default function NavCaterer() {
                                 <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
                                     <li><Link className="dropdown-item" to="/caterer/profile"><i className="fas fa-sliders-h fa-fw"></i> Profile</Link></li>
                                     <li><hr className="dropdown-divider" /></li>
-                                    <li><Link className="dropdown-item" to="/caterer/logout" onClick={handlelogout}><i className="fas fa-sign-out-alt fa-fw"></i>Log Out</Link></li>
+                                    <li><Link className="dropdown-item" to="/caterer/logout"><i className="fas fa-sign-out-alt fa-fw"></i>Log Out</Link></li>
                                 </ul>
                             </li>
                         </ul>

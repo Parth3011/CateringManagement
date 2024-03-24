@@ -40,7 +40,6 @@ const UpdateMenu = () => {
   };
 
   const handleSubmit = async () => {
-    // id.preventDefault();
     try {
         const formData = new FormData();
         formData.append("picture", file);
@@ -133,7 +132,6 @@ const UpdateMenu = () => {
             onChange={handleDataChange}
           ></textarea>
           <br />
-
           <button type="submit" style={{ backgroundColor: "green", marginTop: "30px", marginLeft: "300px" }} onClick={handleSubmit}>Update</button>
         </form>
       )}

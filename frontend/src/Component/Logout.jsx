@@ -1,16 +1,27 @@
-import React from "react";
-import { Outlet } from "react-router-dom";
-import Login from "./Login";
+// import React, { useEffect, useState } from "react";
+// import { Navigate } from "react-router-dom";
 
+// function Logout() {
+//   const [confirmLogout, setConfirmLogout] = useState(false);
 
+  
 
-const LogoutOutlet = () => {
-  return (
-    <>
-      <Login />
-      <Outlet />
-    </>
-  );
-};
+//   useEffect(() => {
+//     if (!confirmLogout) {
+//       const confirm = window.confirm("Are you sure you want to logout?");
+//       if (confirm) {
+//         onLogout();
+//         setConfirmLogout(true);
+//       }
+//     }
+//   }, []);
 
-export default LogoutOutlet;
+//   // If user confirms logout, navigate to "/login", otherwise, do nothing
+//   return (
+//     <>
+//       {confirmLogout && <Navigate to="/login" replace />}
+//     </>
+//   );
+// }
+
+// export default Logout;

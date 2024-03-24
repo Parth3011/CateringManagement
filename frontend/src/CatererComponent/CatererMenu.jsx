@@ -3,13 +3,6 @@ import "../Css/menu.css";
 import axios from "axios";
 
 export default function CatererMenu() {
-  // const [name, setName] = useState("");
-  // const [foodname, setFoodName] = useState("");
-  // const [picture, setPicture] = useState("");
-  // const [category, setCategory] = useState("");
-  // const [price, setPrice] = useState("");
-  // const [desc, setDesc] = useState("");
-  // const [status, setStatus] = useState("");
 
   const data = {
     foodname: "",
@@ -66,15 +59,6 @@ export default function CatererMenu() {
     <div className="registration">
       <h1>Menu</h1>
       <div className="square">
-        {/* <label>CatererName</label>
-        <input
-          type="text"
-          className="name"
-          name="name"
-          value={inputdata.name}
-          onChange={handledata}
-        />
-        <br /> */}
 
         <label>Food Name</label>
         <input

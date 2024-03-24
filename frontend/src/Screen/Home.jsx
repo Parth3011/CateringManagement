@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import Login from "../Component/Login";
-import { BrowserRouter, Routes, Route} from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
 import SignupCaterer from "../CatererComponent/SignupCaterer";
 import SignupCustomer from "../CustomerComponent/SignupCustomer";
 
@@ -24,18 +24,29 @@ import Customer from "../Component/Customer";
 import FirstPage from "../Component/FirstPage";
 import Menus from "../CatererComponent/menus";
 import UpdateMenu from "../CatererComponent/UpdateMenu";
+import AdminHome from "../Component/AdminHome";
 // import LogoutOutlet from "../Component/Logout";
 
 
 export default function Home() {
-  const [user, setuser] = useState(null);
-  console.log(user);
+  // const [user, setuser] = useState(null);
+  // console.log(user);
+
+  // useEffect(() => {
+  //   // Check if user is not null before logging
+  //   if (user !== null) {
+  //     console.log("User state changed:", user);
+  //   }
+  // }, [user]);
+
+  const [user, setuser] = useState(() => {
+    // Retrieve user from localStorage
+    const savedUser = localStorage.getItem("user");
+   return savedUser ? JSON.parse(savedUser) : null;
+  });
 
   useEffect(() => {
-    // Check if user is not null before logging
-    if (user !== null) {
-      console.log("User state changed:", user);
-    }
+    localStorage.setItem("user", JSON.stringify(user));
   }, [user]);
   
 
@@ -43,6 +54,16 @@ export default function Home() {
     setuser(data);
     console.log("Hello"+data);
   };
+
+  const onLogout = () => {
+    localStorage.removeItem("user");
+    setuser(null);
+  };
+
+  const onUpdateProfile = (updatedUser) => {
+    setuser(updatedUser);
+  };
+  
 
   // console.log("re-rendered");
   return (
@@ -60,11 +81,12 @@ export default function Home() {
 
 
           {/* admin */}
-          <Route exact path="/admin" element={<AdminOutlet />}>
+          <Route  path="/admin" element={<AdminOutlet />}>
+            <Route path="home" element={<AdminHome user={user}/>} />
             <Route path="admincaterer" element={<Caterer />} />
             <Route path="admincustomer" element={<Customer/>} />
-            <Route path="profile" element={<Profile user={user}/>} />
-            <Route path="logout" element={<p>Logout</p>} />
+            <Route path="profile" element={<Profile user={user} onUpdateProfile={onUpdateProfile}/>} />
+            <Route path="logout" element={<Logout onLogout={onLogout} />} />
             <Route path="*" element={<h1>404 Page</h1>} />
             <Route path="signupadmin" element={<Signup />} />
           </Route>
@@ -73,23 +95,25 @@ export default function Home() {
 
           {/* caterer */}
 
-          <Route exact path="/caterer" element={<CatererOutlet />}>
-            <Route exact path="menu" element={<Menus />} />
+          <Route path="/caterer" element={<CatererOutlet />}>
+            <Route path="home" element={<p>Home Page</p>} />
+            <Route path="menu" element={<Menus />} />
             <Route path="UpdateMenu/:id" element={<UpdateMenu />} />
             <Route path="catererMenu" element={<CatererMenu/>}/>
             <Route path="order" element={<p>Order</p>} />
-            <Route path="profile" element={<CatererProfile user={user}/>} />
-            <Route path="logout" element={<p>Logout</p>} />
+            <Route path="profile" element={<CatererProfile user={user} onUpdateProfile={onUpdateProfile}/>} />
+            <Route path="logout" element={<Logout onLogout={onLogout} />} />
             <Route path="*" element={<h1>404 Page</h1>} />
           </Route>
 
           {/* customer */}
 
-          <Route  exact path="/customer" element={<CustomerOutlet />}>
+          <Route path="/customer" element={<CustomerOutlet />}>
+            <Route path="home" element={<p>Home Page</p>} />  
             <Route path="menu" element={<p>Menu</p>} />
             <Route path="cart" element={<Checkout />} />
-            <Route path="profile" element={<CustomerProfile user={user} />} />
-            <Route path="logout" element={<p>Logout</p>} />
+            <Route path="profile" element={<CustomerProfile user={user} onUpdateProfile={onUpdateProfile}/>} />
+            <Route path="logout" element={<Logout onLogout={onLogout} />} />
             <Route path="*" element={<h1>404 Page</h1>} />
           </Route>
         </Routes>
@@ -98,4 +122,15 @@ export default function Home() {
        <Footer />
     </div>
   );
+}
+
+
+function Logout({ onLogout }) {
+  // Call the logout function when the component mounts
+  React.useEffect(() => {
+    onLogout();
+  }, [onLogout]);
+
+  // Redirect to the login page after logout
+  return <Navigate to="/login" replace />;
 }

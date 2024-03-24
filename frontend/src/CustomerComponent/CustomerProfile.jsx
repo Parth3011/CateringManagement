@@ -3,7 +3,7 @@ import React, { useState} from 'react'
 import '../Css/signup.css'
 import axios from 'axios';
 
-export default function CustomerProfile({user}) {
+export default function CustomerProfile({user,onUpdateProfile}) {
       console.log(user);
       const [inputdata, setinputData] = useState(user);
      
@@ -21,7 +21,8 @@ export default function CustomerProfile({user}) {
                 axios
                   .put("http://localhost:7000/api/updateprofile", inputdata)
                   .then((resp) => {
-                    alert("Data Updated Successfully")
+                    alert("Data Updated Successfully");
+                    onUpdateProfile(inputdata);
                   });
                 
               } catch (error) {

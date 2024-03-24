@@ -1,19 +1,15 @@
-import React, {useEffect, useState} from 'react'
+import React, {useState} from 'react'
 
 import '../Css/signup.css'
 import axios from 'axios';
 
-export default function Profile({user}) {
+export default function Profile({user,onUpdateProfile}) {
       console.log(user);
       const [inputdata, setinputData] = useState(user);
-      // const [inputdata, setinputData] = useState(() => {
-      //       const savedData = localStorage.getItem("userData");
-      //       return savedData ? JSON.parse(savedData) : user;
-      //     });
-        
-      //     useEffect(() => {
-      //       localStorage.setItem("userData", JSON.stringify(inputdata));
-      //     }, [inputdata]);
+      
+      // useEffect(()=>{
+      //   setinputData(inputdata);
+      // },[inputdata]);
         
           const handledata = (e) => {
             setinputData({ ...inputdata, [e.target.name]: e.target.value || "" });
@@ -28,7 +24,8 @@ export default function Profile({user}) {
                 axios
                   .put("http://localhost:7000/api/updateprofile", inputdata)
                   .then((resp) => {
-                    alert("Data Updated Successfully")
+                    alert("Data Updated Successfully");
+                    onUpdateProfile(inputdata);
                   });
                 
               } catch (error) {

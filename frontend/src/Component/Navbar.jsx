@@ -27,9 +27,16 @@ function Navbar() {
                   aria-current="page"
                   to="/admin"
                 >
+                {/* outlet */}
+                </Link>
+              </li>
+
+              <li className="nav-item">
+                <Link className="nav-link active mx-5" to="/admin/home">
                   Home
                 </Link>
               </li>
+
               <li className="nav-item">
                 <Link className="nav-link active mx-5" to="/admin/admincaterer">
                   caterer
