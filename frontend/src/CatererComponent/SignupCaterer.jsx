@@ -3,9 +3,9 @@ import '../Css/signup.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-export default function SignupCaterer() {
+export default function SignupCaterer({datauser}) {
 
-  const data = { uname: "", email: "", company: "", pwd: "", confirm: "", phone: "", address: "", pin: "", city: "", state: "" };
+  const data = { name: "", email: "", company: "", pwd: "", confirm: "", phone: "", address: "", pincode: "", city: "", state: "" };
   const [inputdata, setinputData] = useState(data);
 
   const handledata = (e) => {
@@ -31,6 +31,7 @@ export default function SignupCaterer() {
           console.log(resp.data.Status);
           if (resp.data.Status === "Success") {
             navigate("/caterer");
+            datauser(resp.data.user);
             console.log("resp",resp);
           }
           else{
@@ -50,7 +51,7 @@ export default function SignupCaterer() {
       <h1>Registration Caterer</h1>
       <div className='box'>
         <label>Username</label>
-        <input type="text" className='uname' name="uname" value={inputdata.uname} onChange={handledata} /><br />
+        <input type="text" className='uname' name="name" value={inputdata.name} onChange={handledata} /><br />
 
         {/* <label>Owner ID No.</label>
       <input type = "number" className='ownerid' name="ownerid" value={inputdata.ownerid} onChange={handledata} /><br/> */}
@@ -74,7 +75,7 @@ export default function SignupCaterer() {
         <textarea className='address' rows="1" name="address" value={inputdata.address} onChange={handledata}></textarea><br />
 
         <label>Pincode</label>
-        <input type="number" className='pin' name="pin" value={inputdata.pin} onChange={handledata} /><br />
+        <input type="number" className='pin' name="pincode" value={inputdata.pincode} onChange={handledata} /><br />
 
         <label>City</label>
         <input type="text" className='city' name="city" value={inputdata.city} onChange={handledata} /><br />

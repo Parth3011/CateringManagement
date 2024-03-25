@@ -77,8 +77,8 @@ export default function Home() {
           <Route path="/" element={<FirstPage/>} />
           <Route path="/login" element={<Login UserData={onlogin} />} />
           <Route path="/forgetpassword" element={<ForgetPassword/>} />
-          <Route path="/signup1" element={<SignupCaterer />} />
-          <Route path="/signup2" element={<SignupCustomer />} />
+          <Route path="/signup1" element={<SignupCaterer datauser={onlogin}/>} />
+          <Route path="/signup2" element={<SignupCustomer datauser={onlogin}/>} />
           {/* <Route path="signupadmin" element={<Signup />} /> */}
 
 
@@ -90,7 +90,7 @@ export default function Home() {
             <Route path="profile" element={<Profile user={user} onUpdateProfile={onUpdateProfile}/>} />
             <Route path="logout" element={<Logout onLogout={onLogout} />} />
             <Route path="*" element={<h1>404 Page</h1>} />
-            <Route path="signupadmin" element={<Signup />} />
+            <Route path="signupadmin" element={<Signup datauser={onlogin}/>} />
           </Route>
  
 

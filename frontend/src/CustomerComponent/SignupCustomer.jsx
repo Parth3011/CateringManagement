@@ -3,15 +3,15 @@ import "../Css/signup.css";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 
-export default function SignupCustomer() {
+export default function SignupCustomer({datauser}) {
   const data = {
-    uname: "",
+    name: "",
     email: "",
     pwd: "",
     confirm: "",
     phone: "",
     address: "",
-    pin: "",
+    pincode: "",
     city: "",
     state: "",
   };
@@ -32,17 +32,17 @@ export default function SignupCustomer() {
       axios
         .post("http://localhost:7000/api/signupcustomer", inputdata)
         .then((resp) => {
+          console.log(resp.data.user);
           console.log(resp.data.Status);
           if (resp.data.Status === "Success") {
             navigate("/customer");
-            console.log(resp);
+            datauser(resp.data.user);
           }
           else{
             console.log("hi here");
             alert("registration is invalid");
           }
         })
-        .then((err) => console.log(err));
     } catch (e) {
       console.error("Error submitting form:", e);
       alert("An error occurred while submitting the form");
@@ -57,8 +57,8 @@ export default function SignupCustomer() {
         <input
           type="text"
           className="uname"
-          name="uname"
-          value={inputdata.uname}
+          name="name"
+          value={inputdata.name}
           onChange={handledata}
         />
         <br />
@@ -117,8 +117,8 @@ export default function SignupCustomer() {
         <input
           type="number"
           className="pin"
-          name="pin"
-          value={inputdata.pin}
+          name="pincode"
+          value={inputdata.pincode}
           onChange={handledata}
         />
         <br />

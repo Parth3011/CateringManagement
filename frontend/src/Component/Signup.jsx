@@ -3,9 +3,9 @@ import '../Css/signup.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-export default function Signup() {
+export default function Signup({datauser}) {
 
-  const data = { uname: "", email: "",pwd: "", confirm: "", phone: "", address: "", pin: "", city: "", state: "" };
+  const data = { name: "", email: "",pwd: "", confirm: "", phone: "", address: "", pincode: "", city: "", state: "" };
   const [inputdata, setinputData] = useState(data);
 
   const handledata = (e) => {
@@ -22,6 +22,7 @@ export default function Signup() {
           console.log(resp.data.Status);
           if (resp.data.Status === "Success") {
             navigate("/admin");
+            datauser(resp.data.user);
             console.log("resp",resp);
           }
           else{
@@ -43,7 +44,7 @@ export default function Signup() {
       <h1>Registration Admin</h1>
       <div className='box'>
         <label>Username</label>
-        <input type="text" className='uname' name="uname" value={inputdata.uname} onChange={handledata} /><br />
+        <input type="text" className='uname' name="name" value={inputdata.name} onChange={handledata} /><br />
 
         <label>Email</label>
         <input type="email" className='email' name="email" value={inputdata.email} onChange={handledata} /><br />
@@ -61,7 +62,7 @@ export default function Signup() {
         <textarea className='address' rows="1" name="address" value={inputdata.address} onChange={handledata}></textarea><br />
 
         <label>Pincode</label>
-        <input type="number" className='pin' name="pin" value={inputdata.pin} onChange={handledata} /><br />
+        <input type="number" className='pin' name="pincode" value={inputdata.pincode} onChange={handledata} /><br />
 
         <label>City</label>
         <input type="text" className='city' name="city" value={inputdata.city} onChange={handledata} /><br />

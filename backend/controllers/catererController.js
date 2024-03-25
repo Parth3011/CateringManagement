@@ -8,13 +8,13 @@ const con = require("../config/dbConnection");
 
 const signupcaterer = (req, resp) => {
 
-    let uname = req.body.uname;
+    let name = req.body.name;
     let email = req.body.email;
     let pwd = req.body.pwd;
     let confirm = req.body.confirm;
     let phone = req.body.phone;
     let address = req.body.address;
-    let pin = req.body.pin;
+    let pincode = req.body.pincode;
     let state = req.body.state;
     let city = req.body.city;
     let company = req.body.company;
@@ -32,6 +32,19 @@ const signupcaterer = (req, resp) => {
         return resp.status(400).json({ errors: errors.array() });
     }
 
+    const userData = {
+        name: req.body.name,
+        email: req.body.email,
+        pwd: req.body.pwd,
+        confirm: req.body.confirm,
+        phone: req.body.phone,
+        address: req.body.address,
+        pincode: req.body.pincode,
+        state: req.body.state,
+        city: req.body.city,
+        company:req.body.company,
+        role: 'caterer'
+    };
 
 
     con.query(
@@ -57,7 +70,7 @@ const signupcaterer = (req, resp) => {
                         // email=con.escape(email);
                         // pwd = con.escape(hash);
 
-                        con.query(sql, [uname, email, pwd, confirm, phone, address, pin, state, city,company,role], (err, data) => {
+                        con.query(sql, [name, email, pwd, confirm, phone, address, pincode, state, city,company,role], (err, data) => {
                             if (err) {
                                 console.log(err);
                                 return resp.status(400).send({
@@ -96,7 +109,8 @@ const signupcaterer = (req, resp) => {
                                         // return resp.json({ Status: "success" });
                                         return resp.status(200).send({
                                             Status:"Success",
-                                            msg:"The user has been registered with us"
+                                            msg:"The user has been registered with us",
+                                            user:userData
                                         });
                                     }
                                 });

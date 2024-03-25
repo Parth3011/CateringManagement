@@ -1,7 +1,7 @@
 const {check} = require("express-validator");
 
 exports.signupvalidation = [
-    check('uname','Name is required').not().isEmpty(),
+    check('name','Name is required').not().isEmpty(),
     check('email','Please enter a valid mail').isEmail().normalizeEmail({gmail_remove_dots:true}),
     check('pwd','Password is required').isLength({min:5})
 ]

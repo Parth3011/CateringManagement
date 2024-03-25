@@ -8,16 +8,18 @@ const con = require("../config/dbConnection");
 
 const signupadmin = (req, resp) => {
 
-    let uname = req.body.uname;
+    let name = req.body.name;
     let email = req.body.email;
     const pwd = req.body.pwd;
     let confirm = req.body.confirm;
     let phone = req.body.phone;
     let address = req.body.address;
-    let pin = req.body.pin;
+    let pincode = req.body.pincode;
     let state = req.body.state;
     let city = req.body.city;
     let role = 'admin';
+
+
    
 
 
@@ -27,10 +29,24 @@ const signupadmin = (req, resp) => {
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+        console.log(errors);
         return resp.status(400).json({ errors: errors.array() });
     }
 
     console.log(pwd);
+
+    const userData = {
+        name: req.body.name,
+        email: req.body.email,
+        pwd: req.body.pwd,
+        confirm: req.body.confirm,
+        phone: req.body.phone,
+        address: req.body.address,
+        pincode: req.body.pincode,
+        state: req.body.state,
+        city: req.body.city,
+        role: 'admin'
+    };
 
 
     con.query(
@@ -54,11 +70,11 @@ const signupadmin = (req, resp) => {
                     else {
 
 
-                        con.query(sql, [uname, email, pwd, confirm, phone, address, pin, state, city,role], (err, data) => {
+                        con.query(sql, [name, email, pwd, confirm, phone, address, pincode, state, city,role], (err, data) => {
                             if (err) {
                                 console.log(err);
                                 return resp.status(400).send({
-                                    msg:err
+                                    msg:"hi"+err
                                 });
 
                             }
@@ -92,7 +108,8 @@ const signupadmin = (req, resp) => {
                                         // return resp.json({ Status: "success" });
                                         return resp.status(200).send({
                                             msg:"The user has been registered with us",
-                                            Status:"Success"
+                                            Status:"Success",
+                                            user:userData
                                         });
                                     // }
                                 });

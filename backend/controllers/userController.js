@@ -12,7 +12,7 @@ const signupcustomer = (req, resp) => {
 
     // const salt =await bcrypt.genSalt(10);
 
-    let uname = req.body.uname;
+    let name = req.body.name;
     let email = req.body.email;
     // let pwd = await bcrypt.hash( req.body.pwd,salt) ;
     let pwd = req.body.pwd;
@@ -20,7 +20,7 @@ const signupcustomer = (req, resp) => {
     let confirm = req.body.confirm;
     let phone = req.body.phone;
     let address = req.body.address;
-    let pin = req.body.pin;
+    let pincode = req.body.pincode;
     let state = req.body.state;
     let city = req.body.city;
     // let user_type = 'customer';
@@ -69,11 +69,24 @@ const signupcustomer = (req, resp) => {
                 // email=con.escape(email);
                 // pwd = con.escape(hash);
 
-                con.query(sql, [uname, email, pwd, confirm, phone, address, pin, state, city, role], (err, data) => {
+                const userData = {
+                    name: req.body.name,
+                    email: req.body.email,
+                    pwd: req.body.pwd,
+                    confirm: req.body.confirm,
+                    phone: req.body.phone,
+                    address: req.body.address,
+                    pin: req.body.pincode,
+                    state: req.body.state,
+                    city: req.body.city,
+                    role: 'customer'
+                };
+
+                con.query(sql, [name, email, pwd, confirm, phone, address, pincode, state, city, role], (err, data) => {
                     if (err) {
                         console.log(err);
                         return resp.status(400).send({
-                            msg: err
+                            msg: "Error"+err
                         });
                         // else {
                         //     return resp.json({ Status: "success" });
@@ -81,7 +94,7 @@ const signupcustomer = (req, resp) => {
                     }
                     else {
                         // con.query(sql1, [data.insertId, email, pwd], (err, data) => {
-                        con.query(sql1, [data.insertId, email, pwd, role], (err, data) => {
+                        con.query(sql1, [data.insertId, email, pwd, role], (err, result) => {
                             if (err) {
                                 console.log(err);
                                 return resp.status(400).send({
@@ -104,14 +117,13 @@ const signupcustomer = (req, resp) => {
                             //             });  
                             //         }
                             //     });
+                            console.log(userData);
 
-
-                            // return resp.json({ Status: "success" });
                             return resp.status(200).send({
                                 Status: "Success",
-                                msg: "The user has been registered with us"
+                                msg: "The user has been registered with us",
+                                user:userData
                             });
-                            //  }
                         });
                     }
 
