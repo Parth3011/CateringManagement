@@ -4,7 +4,7 @@
     background-image: url("https://img.freepik.com/free-vector/white-abstract-background-design_23-2148825582.jpg");
      position:relative;
     /*display : flex; */
-    height : 680px;
+    height : 610px;
     width : 100%;
     border : 1px solid black;
     margin-top: 2px;
@@ -19,7 +19,7 @@
 .img{
 
     width: 400px;
-    height: 630px;
+    height: 610px;
 }
 
 .logo {

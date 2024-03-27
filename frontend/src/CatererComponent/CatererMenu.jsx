@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import "../Css/menu.css";
 import axios from "axios";
 
-export default function CatererMenu() {
+export default function CatererMenu({user}) {
+
+  console.log(user.company);
 
   const data = {
     foodname: "",
@@ -34,6 +36,9 @@ export default function CatererMenu() {
       formData.append("price", inputdata.price);
       formData.append("status", inputdata.status);
       formData.append("desc", inputdata.desc);
+      formData.append("caterer_id",user.caterer_id);
+      formData.append("company",user.company);
+
 
       const config = {
         headers: {

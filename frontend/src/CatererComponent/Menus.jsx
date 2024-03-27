@@ -3,7 +3,7 @@ import axios from "axios";
 import "../Css/admintable.css";
 import { useNavigate } from "react-router-dom";
 
-const Menus = () => {
+const Menus = ({user}) => {
   const [re, setre] = useState(false);
   const [menuData, setmenuData] = useState([]);
   useEffect(() => {
@@ -16,7 +16,9 @@ const Menus = () => {
         });
         if (res.data.status === 200) {
           console.log("data get");
-          setmenuData(res.data.data);
+          const filteredMenuData = res.data.data.filter((item) => item.caterer_id === user.caterer_id);
+          setmenuData(filteredMenuData);
+          //setmenuData(res.data.data);
         } else {
           console.log("error");
         }
@@ -60,17 +62,26 @@ const Menus = () => {
 
   return (
     <div>
-      <div style={{ height: "500px", overflow: "auto" }}>
+      <div style={{ height: "700px" ,overflow: "auto" , scrollbarWidth: "none", msOverflowStyle: "none" }}>
+      <style>
+          {`
+            /* Custom scrollbar for WebKit */
+            ::-webkit-scrollbar {
+              display: none;
+            }
+          `}
+        </style>
         <table
           style={{
             backgroundColor: "lightblue",
-            marginLeft: "30%",
+            marginLeft: "20%",
+            width:"70%",
             marginTop: "100px",
             borderCollapse: "collapse",
           }}
         >
           <thead>
-            <tr style={{ backgroundColor: "black" }}>
+            <tr style={{ backgroundColor: "black"  }}>
               <td style={{ color: "white", textAlign: "center" }}>Picture</td>
               <td style={{ color: "white", textAlign: "center" }}>foodname</td>
               <td style={{ color: "white", textAlign: "center" }}>Category</td>
@@ -79,7 +90,7 @@ const Menus = () => {
                 description
               </td>
               <td style={{ color: "white", textAlign: "center" }}>status</td>
-              <td style={{ color: "white", textAlign: "center" }}>Action</td>
+              <td style={{ color: "white", textAlign: "center", width:"300px" }}>Action</td>
             </tr>
           </thead>
           <tbody>
@@ -105,6 +116,7 @@ const Menus = () => {
                       border: "2px solid black",
                       width: "100px",
                       backgroundColor: "red",
+                      marginLeft:"20px"
                     }}
                     onClick={() => handleDelete(data.id)}
                   >
@@ -112,7 +124,7 @@ const Menus = () => {
                   </button>
                   <button
                     style={{
-                      marginLeft: "5px",
+                      marginLeft: "20px",
                       border: "2px solid black",
                       width: "100px",
                       backgroundColor: "blue",
@@ -139,6 +151,7 @@ const Menus = () => {
           Modify
         </button>
       </div>
+      <div style={{marginTop:"30px"}}></div>
     </div>
   );
 };

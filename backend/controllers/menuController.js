@@ -8,14 +8,15 @@ const menu = (req, res) => {
 
     const { foodname, category, price, desc, status } = req.body;
     const { filename } = req.file;
+    const {caterer_id,company} = req.body;
 
-    if (!foodname || !filename || !category || !price || !desc || !status) {
+    if (!foodname || !filename || !category || !price || !desc || !status || !caterer_id) {
         // console.log(foodname,filename,category,price,desc,status);
         res.status(422).json({ status: 422, message: "Fill all the details" });
     }
 
     try {
-        con.query("INSERT INTO menus SET ?", { picture: filename, foodname: foodname, category: category, price: price, description: desc, status: status }, (err, result) => {
+        con.query("INSERT INTO menus SET ?", { picture: filename, foodname: foodname, category: category, price: price, description: desc, status: status, caterer_id:caterer_id, company:company }, (err, result) => {
             if (err) {
                 console.log("error");
             } else {
@@ -31,7 +32,7 @@ const menu = (req, res) => {
 
 
 
-const getmenu = (req, res) => {
+const getmenu = (req, res) => { 
     try {
         con.query("SELECT * FROM menus", (err, result) => {
             if (err) {

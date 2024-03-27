@@ -99,9 +99,9 @@ export default function Home() {
 
           <Route path="/caterer" element={<CatererOutlet />}>
             <Route path="home" element={<CatererHome user={user}/>} />
-            <Route path="menu" element={<Menus />} />
+            <Route path="menu" element={<Menus user={user}/>} />
             <Route path="UpdateMenu/:id" element={<UpdateMenu />} />
-            <Route path="catererMenu" element={<CatererMenu/>}/>
+            <Route path="catererMenu" element={<CatererMenu user={user}/>}/>
             <Route path="order" element={<p>Order</p>} />
             <Route path="profile" element={<CatererProfile user={user} onUpdateProfile={onUpdateProfile}/>} />
             <Route path="logout" element={<Logout onLogout={onLogout} />} />
@@ -109,7 +109,6 @@ export default function Home() {
           </Route>
 
           {/* customer */}
-
           <Route path="/customer" element={<CustomerOutlet />}>
             <Route path="home" element={<CustomerHome user={user}/>} />  
             <Route path="menu" element={<p>Menu</p>} />

@@ -2,22 +2,37 @@ table {
     /* width: 100%; */
 }
 
-thead,td {
+thead,
+td {
     border: 1px solid black;
     padding: 8px;
     /* text-align: left; */
 }
+
 th {
     background-color: #f2f2f2;
 }
 
 
-.image{
+.image {
     width: 70px;
     height: 70px;
     border: 2px solid black;
 }
 
-.backbox{
-    
+/* .blackbox {
+    height: "700px";
+    overflow: "auto";
+} */
+
+/* .blackbox::-webkit-scrollbar {
+    width: 0;
 }
+
+.blackbox::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.blackbox::-webkit-scrollbar-thumb {
+    background: transparent;
+} */
