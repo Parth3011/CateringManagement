@@ -31,18 +31,18 @@ export default function NavCustomer() {
                   aria-current="page"
                   to="/customer"
                 >
-                  Home
+                  {/* Home */}
                 </Link>
               </li>
               <li className="nav-item">
                 <Link className="nav-link active mx-5" to="/customer/menu">
-                  Menu
+                  {/* Menu */}
                 </Link>
               </li>
 
               <li className="nav-item">
                 <Link className="nav-link active mx-5" to="/customer/cart">
-                  Cart
+                  {/* Cart */}
                 </Link>
               </li>
             </ul>

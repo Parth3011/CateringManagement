@@ -58,8 +58,16 @@ const Forget = require("../controllers/Forget");
 const catererdetailes = require("../controllers/admin/catererdetailes");
 const customerdetailes = require("../controllers/admin/customerdetailes");
 const profile = require("../controllers/Profile/profile");
-
 // const {menuvalidation} = require("../helpers/validation");
+
+
+
+// customermenus
+const { getcustomermenu } = require("../controllers/customer/Firstpage");
+
+
+
+
 
 
 
@@ -85,6 +93,10 @@ router.get("/getmenu",menuController.getmenu);
 router.delete("/deletemenu/:id",menuController.deletemenu);
 router.put("/updatemenu/:id",upload.single("picture"),menuController.updatemenu);
 router.get("/getmenu1/:id",menuController.getmenu1);
+
+
+  // customermenu
+router.get("/getcustomermenu",getcustomermenu);
 
 
 router.delete("/deletecustomer/:id", customerdetailes.deletecustomer);

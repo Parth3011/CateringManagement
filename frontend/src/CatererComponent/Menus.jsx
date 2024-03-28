@@ -82,13 +82,11 @@ const Menus = ({user}) => {
         >
           <thead>
             <tr style={{ backgroundColor: "black"  }}>
-              <td style={{ color: "white", textAlign: "center" }}>Picture</td>
+              <td style={{ color: "white", textAlign: "center" ,width:"100px"}}>Picture</td>
               <td style={{ color: "white", textAlign: "center" }}>foodname</td>
               <td style={{ color: "white", textAlign: "center" }}>Category</td>
               <td style={{ color: "white", textAlign: "center" }}>price</td>
-              <td style={{ color: "white", textAlign: "center" }}>
-                description
-              </td>
+              <td style={{ color: "white", textAlign: "center",width:"300px" }}>description</td>
               <td style={{ color: "white", textAlign: "center" }}>status</td>
               <td style={{ color: "white", textAlign: "center", width:"300px" }}>Action</td>
             </tr>
@@ -148,7 +146,7 @@ const Menus = ({user}) => {
           }}
           onClick={handleAdd}
         >
-          Modify
+          Add Menu
         </button>
       </div>
       <div style={{marginTop:"30px"}}></div>

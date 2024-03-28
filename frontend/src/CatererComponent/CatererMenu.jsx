@@ -4,7 +4,7 @@ import axios from "axios";
 
 export default function CatererMenu({user}) {
 
-  console.log(user.company);
+  // console.log(user.company);
 
   const data = {
     foodname: "",
@@ -37,7 +37,7 @@ export default function CatererMenu({user}) {
       formData.append("status", inputdata.status);
       formData.append("desc", inputdata.desc);
       formData.append("caterer_id",user.caterer_id);
-      formData.append("company",user.company);
+      // formData.append("company",user.company);
 
 
       const config = {

@@ -8,7 +8,7 @@ const menu = (req, res) => {
 
     const { foodname, category, price, desc, status } = req.body;
     const { filename } = req.file;
-    const {caterer_id,company} = req.body;
+    const {caterer_id} = req.body;
 
     if (!foodname || !filename || !category || !price || !desc || !status || !caterer_id) {
         // console.log(foodname,filename,category,price,desc,status);
@@ -16,7 +16,7 @@ const menu = (req, res) => {
     }
 
     try {
-        con.query("INSERT INTO menus SET ?", { picture: filename, foodname: foodname, category: category, price: price, description: desc, status: status, caterer_id:caterer_id, company:company }, (err, result) => {
+        con.query("INSERT INTO menus SET ?", { picture: filename, foodname: foodname, category: category, price: price, description: desc, status: status, caterer_id:caterer_id }, (err, result) => {
             if (err) {
                 console.log("error");
             } else {
@@ -78,11 +78,12 @@ const deletemenu = (req, res) => {
         const id = parseInt(req.params.id);
     
         const { foodname, category, price, description, status } = req.body;
-        const { filename } = req.file;  
+        // const { filename } = req.file;  
     
         console.log(req.body);
         console.log(req.params.id);
-        const sql = `UPDATE menus SET foodname="${foodname}", picture="${filename}", category="${category}", price="${price}", description="${description}", status="${status}" WHERE id = ${id};`;
+        // , picture="${filename}"
+        const sql = `UPDATE menus SET foodname="${foodname}", category="${category}", price="${price}", description="${description}", status="${status}" WHERE id = ${id};`;
         console.log(sql);
      
         con.query(sql, (err, result) => {

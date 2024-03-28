@@ -6,7 +6,7 @@ import "../Css/menu.css";
 const UpdateMenu = () => {
   const { id } = useParams();
   const [menuItem, setMenuItem] = useState(null);
-  const [file, setFile] = useState("");
+  // const [file, setFile] = useState("");
 
   useEffect(() => {
     const fetchMenuItem = async () => {
@@ -34,15 +34,15 @@ const UpdateMenu = () => {
     }));
   };
 
-  const handleImageChange = (e) => {
-    setFile(e.target.files[0]);
-    console.log(file);
-  };
+  // const handleImageChange = (e) => {
+  //   setFile(e.target.files[0]);
+  //   console.log(file);
+  // };
 
   const handleSubmit = async () => {
     try {
         const formData = new FormData();
-        formData.append("picture", file);
+        // formData.append("picture", file);
         formData.append("foodname", menuItem.foodname);
         formData.append("category", menuItem.category);
         formData.append("price", menuItem.price);
@@ -84,14 +84,14 @@ const UpdateMenu = () => {
           <br />
 
 
-          <label>Picture Food</label>
+          {/* <label>Picture Food</label>
           <input
             type="file"
             className="picture"
             name="picture"
             onChange={handleImageChange}
           />
-          <br />
+          <br /> */}
 
           <label>Category</label>
           <input
