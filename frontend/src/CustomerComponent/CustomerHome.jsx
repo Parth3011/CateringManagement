@@ -1,10 +1,13 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const CustomerHome = ({ user }) => {
-  const [inputData, setInputData] = useState(user);
+  const [inputData] = useState(user);
   const [searchQuery, setSearchQuery] = useState("");
   const [menus, setMenus] = useState([]);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Fetch menu data from the backend API when the component mounts
@@ -52,6 +55,10 @@ const CustomerHome = ({ user }) => {
     }, {})
   );
 
+  const handleview = (caterer_id)=>{
+    navigate(`/customer/cmenu/${caterer_id}`);
+  }
+
   return (
     <div>
       <div
@@ -60,32 +67,33 @@ const CustomerHome = ({ user }) => {
             "url('https://img.freepik.com/free-photo/vintage-old-rustic-cutlery-dark_1220-4883.jpg')",
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
-          height: "700px",
+          minHeight: "100vh",
           position: "relative",
         }}
       >
         <div
           style={{
             position: "absolute",
-            left: "50%",
-            marginTop: "330px",
-            transform: "translate(-50%, -50%)",
+            top: 0,
+            left: 0,
             color: "yellow",
-            fontSize: "1em",
-            fontWeight: "bold",
-            textAlign: "center",
-            width: "90%",
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            paddingTop: "50px", 
           }}
         >
           <h1>Welcome {inputData.name}</h1>
           {/* Search Bar */}
           <div
             style={{
+              margin: "30px 0",
               display: "flex",
               alignItems: "center",
-              marginTop: "50px",
-              marginBottom: "20px",
-              marginLeft: "33%",
+              width: "100%",
+              maxWidth: 500, 
             }}
           >
             <input
@@ -95,9 +103,9 @@ const CustomerHome = ({ user }) => {
               placeholder="Search category..."
               style={{
                 padding: "5px",
-                fontSize: "0.8em", // Smaller font size
+                fontSize: "0.8em", 
                 borderRadius: "50px",
-                border: "1px solid #ccc",
+                border: "2px solid #ccc",
                 color: "black",
                 marginRight: "10px",
               }}
@@ -125,77 +133,82 @@ const CustomerHome = ({ user }) => {
           </div>
 
           {groupedMenus.length > 0 ? (
-            <table
+            <div
               style={{
-                width: "90%",
-                height:"500px",
-                overflow:"auto",
-                borderCollapse: "collapse",
-                border:"5px solid black",
-                color: "white",
-                marginLeft: "auto",
-                marginRight: "auto",
+                maxHeight: "calc(100vh - 300px)", 
+                overflowY: "auto",
+                margin: "10px",
               }}
             >
-              <thead>
-                <tr style={{ backgroundColor: "white", color: "black" }}>
-                  <th style={{ padding: "10px" }}>Company</th>
-                  <th style={{ padding: "10px" }}>Category</th>
-                  <th style={{ padding: "10px" }}>Description</th>
-                  <th style={{ padding: "10px" }}>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {groupedMenus.map((menu) => (
-                  <tr key={menu.id} style={{ backgroundColor: "#333" }}>
-                    <td style={{ paddingTop: "10px" }}>{menu.company}</td>
+              <table
+                style={{
+                  width: "1333px",
+                  borderCollapse: "collapse",
+                  border: "5px solid black",
+                }}
+              >
+                <thead>
+                  <tr style={{ backgroundColor: "white", color: "black" }}>
+                    <th style={{ padding: "5px" }}>Company</th>
+                    <th style={{ padding: "5px" }}>Category</th>
+                    <th style={{ padding: "5px" }}>Description</th>
+                    <th style={{ padding: "5px" }}>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {groupedMenus.map((menu) => (
+                    <tr key={menu.id} style={{ backgroundColor: "#333" }}>
+                      <td style={{ padding: "10px" }}>{menu.company}</td>
 
-                    {/* category */}
+                      {/* category */}
 
-                    <td style={{ padding: "10px" }}>
-                      {menu.category.map((category, index) => (
-                        <div key={index}>
-                          <span style={{ color: "white" }}>{index + 1}. </span>{" "}
-                          <span style={{ color: "red" }}>{category}</span>
-                        </div>
-                      ))}
-                    </td>
+                      <td style={{ padding: "5px" }}>
+                        {menu.category.map((category, index) => (
+                          <div key={index}>
+                            <span style={{ color: "white" }}>{index + 1}. </span>{" "}
+                            <span style={{ color: "red" }}>{category}</span>
+                          </div>
+                        ))}
+                      </td>
 
-                    {/* description */}
+                      {/* description */}
 
-                    <td
-                      style={{
-                        padding: "10px",
-                        maxWidth: "200px",
-                        wordWrap: "break-word",
-                      }}
-                    >
-                      {menu.description.map((description, index) => (
-                        <div key={index}>
-                          <span style={{ color: "white" }}>{index + 1}.</span>{" "}
-                          <span style={{ color: "red" }}>{description}</span>
-                        </div>
-                      ))}
-                    </td>
-
-                    <td style={{ padding: "10px" }}>
-                      <button
+                      <td
                         style={{
-                          padding: "5px 10px",
-                          borderRadius: "5px",
-                          background: "yellow",
-                          color: "black",
-                          border: "none",
-                          cursor: "pointer",
+                          padding: "5px",
+                          maxWidth: "200px",
+                          wordWrap: "break-word",
                         }}
                       >
-                        View
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                        {menu.description.map((description, index) => (
+                          <div key={index}>
+                            <span style={{ color: "white" }}>{index + 1}.</span>{" "}
+                            <span style={{ color: "red" }}>{description}</span>
+                          </div>
+                        ))}
+                      </td>
+
+                      <td style={{ width: "150px" }}>
+                        <button onClick={() => handleview(menu.caterer_id)}
+                          style={{
+                            padding: "5px 10px",
+                            marginLeft: "30px",
+                            width: "70px",
+                            borderRadius: "5px",
+                            background: "yellow",
+                            color: "black",
+                            border: "none",
+                            cursor: "pointer",
+                          }}
+                        >
+                          View
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           ) : (
             <p style={{ textAlign: "center", color: "white" }}>
               No menu data available
@@ -204,7 +217,7 @@ const CustomerHome = ({ user }) => {
         </div>
       </div>
     </div>
-     );
+  );
 };
 
 export default CustomerHome;

@@ -35,7 +35,7 @@ export default function NavCustomer() {
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link active mx-5" to="/customer/menu">
+                <Link className="nav-link active mx-5" to="/customer/cmenu/caterer_id">
                   {/* Menu */}
                 </Link>
               </li>

@@ -64,6 +64,7 @@ const profile = require("../controllers/Profile/profile");
 
 // customermenus
 const { getcustomermenu } = require("../controllers/customer/Firstpage");
+const { getcatererinfo, getmenusdetails } = require("../controllers/customer/secondpage");
 
 
 
@@ -95,13 +96,18 @@ router.put("/updatemenu/:id",upload.single("picture"),menuController.updatemenu)
 router.get("/getmenu1/:id",menuController.getmenu1);
 
 
-  // customermenu
-router.get("/getcustomermenu",getcustomermenu);
-
-
 router.delete("/deletecustomer/:id", customerdetailes.deletecustomer);
 router.delete("/deletecaterer/:id", catererdetailes.deletecaterer)
 router.put('/updateprofile', profile.updateDetailes)
 router.put('/updatecatererprofile', profile.updateCatererDetailes)
+
+
+  // customermenu first page
+  router.get("/getcustomermenu",getcustomermenu);
+  // customermenu second page
+  router.get('/getcatererinfo/:caterer_id',getcatererinfo);
+  router.get('/getmenusdetails/:caterer_id',getmenusdetails);
+
+
 
 module.exports = router;
