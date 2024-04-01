@@ -6,13 +6,17 @@ const CustomerHome = ({ user }) => {
   const [inputData] = useState(user);
   const [searchQuery, setSearchQuery] = useState("");
   const [menus, setMenus] = useState([]);
+  const [groupedMenus, setGroupedMenus] = useState([]);
+  const [filteredMenus, setFilteredMenus] = useState([]);
+  const [selectedEvent, setSelectedEvent] = useState(""); // New state for selected event
+  const [numberOfPeople, setNumberOfPeople] = useState(1); // New state for number of people
 
   const navigate = useNavigate();
 
   useEffect(() => {
     // Fetch menu data from the backend API when the component mounts
     fetchMenus();
-  }, []);
+  }, [user]);
 
   const fetchMenus = async () => {
     try {
@@ -28,72 +32,91 @@ const CustomerHome = ({ user }) => {
       const data = response.data.data;
       console.log(data);
       setMenus(data); // Update state with fetched menu data
+
+      const groupedMenus = Object.values(
+        data.reduce((acc, menu) => {
+          if (!acc[menu.company]) {
+            acc[menu.company] = {
+              ...menu,
+              category: [menu.category],
+              description: [menu.description],
+            };
+          } else {
+            acc[menu.company].category.push(menu.category);
+            acc[menu.company].description.push(menu.description);
+          }
+          return acc;
+        }, {})
+      );
+      setGroupedMenus(groupedMenus);
+      setFilteredMenus(groupedMenus); // Initialize filteredMenus with groupedMenus
     } catch (error) {
       console.error("Error fetching menu data:", error);
     }
   };
 
   const handleSearch = (e) => {
-    setSearchQuery(e.target.value);
-    // Perform search functionality here
+    const query = e.target.value.toLowerCase();
+    setSearchQuery(query);
+
+    if (query.trim() === "") {
+      // If the search query is empty, display all menus without filtering or sorting
+      setFilteredMenus(groupedMenus);
+      return;
+    }
+
+    // Filter menus based on category
+    const filteredMenus = groupedMenus.filter((menu) => {
+      const matches = menu.category.filter((category) =>
+        category.toLowerCase().includes(query)
+      ).length;
+      return matches > 0; // Only include menus with at least one match
+    });
+
+    // Sort filtered menus based on the number of matches in descending order
+    filteredMenus.sort((a, b) => {
+      const matchesA = a.category.filter((category) =>
+        category.toLowerCase().includes(query)
+      ).length;
+      const matchesB = b.category.filter((category) =>
+        category.toLowerCase().includes(query)
+      ).length;
+      return matchesB - matchesA; // Sort in descending order
+    });
+
+    setFilteredMenus(filteredMenus);
   };
 
-  // Group menus by company name and concatenate categories and descriptions
-  const groupedMenus = Object.values(
-    menus.reduce((acc, menu) => {
-      if (!acc[menu.company]) {
-        acc[menu.company] = {
-          ...menu,
-          category: [menu.category],
-          description: [menu.description],
-        };
-      } else {
-        acc[menu.company].category.push(menu.category);
-        acc[menu.company].description.push(menu.description);
-      }
-      return acc;
-    }, {})
-  );
-
-  const handleview = (caterer_id)=>{
-    navigate(`/customer/cmenu/${caterer_id}`);
-  }
+  const handleView = (caterer_id) => {
+    navigate(`/customer/cmenu/${caterer_id}`, {
+      state: {
+        selectedEvent,
+        numberOfPeople,
+      },
+    });
+  };
 
   return (
     <div>
+      {/* Content with background color */}
       <div
         style={{
-          backgroundImage:
-            "url('https://img.freepik.com/free-photo/vintage-old-rustic-cutlery-dark_1220-4883.jpg')",
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "cover",
-          minHeight: "100vh",
-          position: "relative",
+          backgroundColor: "#f0f0f0",
+          minHeight: "calc(100vh - 30px)",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          paddingTop: "50px",
         }}
       >
-        <div
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            color: "yellow",
-            width: "100%",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            paddingTop: "50px", 
-          }}
-        >
+        <div style={{ width: "100%", maxWidth: 800 }}>
           <h1>Welcome {inputData.name}</h1>
           {/* Search Bar */}
           <div
             style={{
-              margin: "30px 0",
               display: "flex",
               alignItems: "center",
-              width: "100%",
-              maxWidth: 500, 
+              marginBottom: "20px",
             }}
           >
             <input
@@ -102,71 +125,109 @@ const CustomerHome = ({ user }) => {
               onChange={handleSearch}
               placeholder="Search category..."
               style={{
-                padding: "5px",
-                fontSize: "0.8em", 
-                borderRadius: "50px",
+                padding: "8px",
+                fontSize: "1em",
+                borderRadius: "8px",
                 border: "2px solid #ccc",
-                color: "black",
                 marginRight: "10px",
+                flex: 1,
               }}
             />
-            <span
-              role="img"
-              aria-label="search"
+            <button
               style={{
-                fontSize: "1.5em",
+                padding: "8px 16px",
+                fontSize: "1em",
+                borderRadius: "8px",
+                border: "none",
+                background: "#ffc107",
+                color: "black",
                 cursor: "pointer",
-                transition: "transform 0.3s",
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.transform = "scale(1.2)";
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.transform = "scale(1)";
               }}
             >
-              🔍
-            </span>{" "}
-            {/* Unicode search icon */}
-            {/* Shift + ctrl + u */}
-            {/* window + . for emogi */}
+              Search
+            </button>
+          </div>
+
+          {/* Event selection and Number of people input */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              marginBottom: "20px",
+            }}
+          >
+            {/* Event selection */}
+            <div style={{ marginRight: "10px" }}>
+              <label htmlFor="event">Select Event: </label>
+              <select
+                id="event"
+                value={selectedEvent}
+                onChange={(e) => setSelectedEvent(e.target.value)}
+                style={{
+                  marginLeft: "10px",
+                  padding: "8px",
+                  borderRadius: "8px",
+                  border: "2px solid #ccc",
+                }}
+              >
+                <option value="">--Select Event--</option>
+                <option value="wedding">Wedding</option>
+                <option value="birthday">Birthday</option>
+                <option value="corporate">Corporate</option>
+                {/* Add more options as needed */}
+              </select>
+            </div>
+
+            {/* Number of people input */}
+            <div>
+              <label htmlFor="numberOfPeople">Number of People: </label>
+              <input
+                type="number"
+                id="numberOfPeople"
+                value={numberOfPeople}
+                onChange={(e) => setNumberOfPeople(e.target.value)}
+                min="1"
+                style={{
+                  marginLeft: "10px",
+                  padding: "8px",
+                  borderRadius: "8px",
+                  border: "2px solid #ccc",
+                }}
+              />
+            </div>
           </div>
 
           {groupedMenus.length > 0 ? (
             <div
-              style={{
-                maxHeight: "calc(100vh - 300px)", 
-                overflowY: "auto",
-                margin: "10px",
-              }}
+              style={{ maxHeight: "calc(100vh - 300px)", overflowY: "auto" }}
             >
-              <table
-                style={{
-                  width: "1333px",
-                  borderCollapse: "collapse",
-                  border: "5px solid black",
-                }}
-              >
+              <table style={{ width: "100%", borderCollapse: "collapse" }}>
                 <thead>
-                  <tr style={{ backgroundColor: "white", color: "black" }}>
-                    <th style={{ padding: "5px" }}>Company</th>
-                    <th style={{ padding: "5px" }}>Category</th>
-                    <th style={{ padding: "5px" }}>Description</th>
-                    <th style={{ padding: "5px" }}>Action</th>
+                  <tr style={{ backgroundColor: "#ffc107", color: "#333" }}>
+                    <th style={{ padding: "8px" }}>Company</th>
+                    <th style={{ padding: "8px" }}>Category</th>
+                    <th style={{ padding: "8px" }}>Description</th>
+                    <th style={{ padding: "8px" }}>Action</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {groupedMenus.map((menu) => (
-                    <tr key={menu.id} style={{ backgroundColor: "#333" }}>
-                      <td style={{ padding: "10px" }}>{menu.company}</td>
+                  {filteredMenus.map((menu, index) => (
+                    <tr
+                      key={menu.id}
+                      style={{
+                        backgroundColor: index % 2 === 0 ? "#f0f0f0" : "#fff",
+                        color: "#333",
+                      }}
+                    >
+                      <td style={{ padding: "8px" }}>{menu.company}</td>
 
                       {/* category */}
 
-                      <td style={{ padding: "5px" }}>
+                      <td style={{ padding: "8px" }}>
                         {menu.category.map((category, index) => (
                           <div key={index}>
-                            <span style={{ color: "white" }}>{index + 1}. </span>{" "}
-                            <span style={{ color: "red" }}>{category}</span>
+                            <span>{index + 1}. </span>
+                            <span style={{ color: "black" }}>{category}</span>
                           </div>
                         ))}
                       </td>
@@ -175,28 +236,29 @@ const CustomerHome = ({ user }) => {
 
                       <td
                         style={{
-                          padding: "5px",
+                          padding: "8px",
                           maxWidth: "200px",
                           wordWrap: "break-word",
                         }}
                       >
                         {menu.description.map((description, index) => (
                           <div key={index}>
-                            <span style={{ color: "white" }}>{index + 1}.</span>{" "}
-                            <span style={{ color: "red" }}>{description}</span>
+                            <span>{index + 1}.</span>
+                            <span style={{ color: "black" }}>
+                              {description}
+                            </span>
                           </div>
                         ))}
                       </td>
 
-                      <td style={{ width: "150px" }}>
-                        <button onClick={() => handleview(menu.caterer_id)}
+                      <td style={{ padding: "8px" }}>
+                        <button
+                          onClick={() => handleView(menu.caterer_id)}
                           style={{
                             padding: "5px 10px",
-                            marginLeft: "30px",
-                            width: "70px",
                             borderRadius: "5px",
-                            background: "yellow",
-                            color: "black",
+                            background: "#ffc107",
+                            color: "#333",
                             border: "none",
                             cursor: "pointer",
                           }}
@@ -210,9 +272,7 @@ const CustomerHome = ({ user }) => {
               </table>
             </div>
           ) : (
-            <p style={{ textAlign: "center", color: "white" }}>
-              No menu data available
-            </p>
+            <p style={{ textAlign: "center" }}>No menu data available</p>
           )}
         </div>
       </div>

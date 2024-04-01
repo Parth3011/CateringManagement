@@ -64,7 +64,8 @@ const profile = require("../controllers/Profile/profile");
 
 // customermenus
 const { getcustomermenu } = require("../controllers/customer/Firstpage");
-const { getcatererinfo, getmenusdetails } = require("../controllers/customer/secondpage");
+const { getcatererinfo, getmenusdetails } = require("../controllers/customer/Secondpage");
+const { event } = require("../controllers/customer/ThirdPage");
 
 
 
@@ -107,6 +108,9 @@ router.put('/updatecatererprofile', profile.updateCatererDetailes)
   // customermenu second page
   router.get('/getcatererinfo/:caterer_id',getcatererinfo);
   router.get('/getmenusdetails/:caterer_id',getmenusdetails);
+
+  //customer ThirdPage
+  router.post('/events',event);
 
 
 

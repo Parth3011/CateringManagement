@@ -28,6 +28,7 @@ import AdminHome from "../Component/AdminHome";
 import CatererHome from "../CatererComponent/CatererHome";
 import CustomerHome from "../CustomerComponent/CustomerHome";
 import Caterermenudetails from "../CustomerComponent/Caterermenudetails";
+import CartPage from "../CustomerComponent/CartPage";
 // import LogoutOutlet from "../Component/Logout";
 
 
@@ -113,7 +114,9 @@ export default function Home() {
           <Route path="/customer" element={<CustomerOutlet />}>
             <Route path="home" element={<CustomerHome user={user}/>} />  
             <Route path="cmenu/:caterer_id" element={<Caterermenudetails />} />
-            <Route path="cart" element={<Checkout />} />
+            <Route path="cart" element={<CartPage />} />
+            <Route path="checkout" element={<Checkout />} />
+            <Route path="payment" element={<p>Paymentdone</p>} />
             <Route path="profile" element={<CustomerProfile user={user} onUpdateProfile={onUpdateProfile}/>} />
             <Route path="logout" element={<Logout onLogout={onLogout} />} />
             <Route path="*" element={<h1>404 Page</h1>} />

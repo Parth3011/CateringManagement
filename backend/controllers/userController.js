@@ -76,7 +76,7 @@ const signupcustomer = (req, resp) => {
                     confirm: req.body.confirm,
                     phone: req.body.phone,
                     address: req.body.address,
-                    pin: req.body.pincode,
+                    pincode: req.body.pincode,
                     state: req.body.state,
                     city: req.body.city,
                     role: 'customer'

@@ -1,12 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useLocation, useParams, useNavigate } from "react-router-dom";
 
 const Caterermenudetails = () => {
   const [catererDetails, setCatererDetails] = useState(null);
   const [menus, setMenus] = useState([]);
+  const [selectedItems, setSelectedItems] = useState([]); // State to store selected items
   const { caterer_id } = useParams(); // Accessing the caterer_id parameter from the URL
-  console.log(caterer_id);
+  const location = useLocation();
+  const { selectedEvent, numberOfPeople } = location.state;
+  const navigate = useNavigate(); // Hook to navigate to other routes
+
+  console.log(selectedEvent);
+  console.log(numberOfPeople);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -15,51 +22,150 @@ const Caterermenudetails = () => {
         const catererResponse = await axios.get(
           `http://localhost:7000/api/getcatererinfo/${caterer_id}`
         );
-        console.log(catererResponse.data);
         setCatererDetails(catererResponse.data);
 
         // Fetch menus
         const menuResponse = await axios.get(
           `http://localhost:7000/api/getmenusdetails/${caterer_id}`
         );
-        console.log(menuResponse.data);
-        setMenus(menuResponse.data);
+        // Initialize selected property to false for each menu item
+        const menusWithSelected = menuResponse.data.map((menu) => ({
+          ...menu,
+          selected: false,
+        }));
+        setMenus(menusWithSelected);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
       }
     };
 
     fetchData();
   }, [caterer_id]);
 
+  // Function to handle adding a dish to the cart
+  const addToCart = (index) => {
+    const updatedMenus = [...menus];
+    updatedMenus[index].selected = !updatedMenus[index].selected;
+    setMenus(updatedMenus);
+    // Update selectedItems state with selected items
+    const selected = updatedMenus.filter((menu) => menu.selected);
+    setSelectedItems(selected);
+    console.log("Selected items:", selected); // Check if selected items are updated
+  };
+
+  // Function to navigate to the cart page with selected items, event, and number of people data
+  const toCartPage = () => {
+    navigate(`/customer/cart`, {
+      state: {
+        selectedItems,
+        selectedEvent,
+        numberOfPeople,
+      },
+    });
+  };
+
   return (
     <div>
       {/* Display caterer details */}
       {catererDetails && (
         <div>
-          <h2 style={{marginTop:"10px",fontSize: "1.5em", fontWeight: "bold"}}>Welcome to {catererDetails.company} caterer</h2>
+          <h2
+            style={{ marginTop: "10px", fontSize: "1.5em", fontWeight: "bold" }}
+          >
+            Welcome to {catererDetails.company} caterer
+          </h2>
           <div>
-            <h3 style={{marginTop:"33px",fontSize: "1.2em", fontWeight: "bold"}}>Contact Information</h3>
-            <p style={{marginTop:"15px"}}>Phone: {catererDetails.phone}</p>
-            <p>Email: {catererDetails.email}</p>
-            <p>Address: {catererDetails.address}</p>
+            <h3
+              style={{
+                marginTop: "33px",
+                fontSize: "1.2em",
+                fontWeight: "bold",
+              }}
+            >
+              Contact Information
+            </h3>
+            <div>
+              <p>Phone: {catererDetails.phone}</p>
+              <p>Email: {catererDetails.email}</p>
+              <p>Address: {catererDetails.address}</p>
+            </div>
           </div>
         </div>
       )}
 
       {/* Display menus */}
-      <h3 style={{ marginTop: '50px',fontSize: "1.2em", fontWeight: "bold"}}>Menus</h3>
-      <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-        {menus.map((menu) => (
-          <div key={menu.id} style={{ margin: '20px', textAlign: 'center' }}>
-            <img src={`http://localhost:7000/public/images/${menu.picture}`} alt={menu.foodname} style={{ width: '233px', height: '100px' }} />
-            <p style={{width:'250px'}}>FoodName: {menu.foodname}</p>
-            <p style={{width:'250px'}}>Category: {menu.category}</p>
-            <p style={{width:'250px'}}>Description: {menu.description}</p>
-            <p style={{width:'250px'}}>Price: {menu.price}</p>
+      <h3
+        style={{
+          marginTop: "33px",
+          fontSize: "1.2em",
+          fontWeight: "bold",
+        }}
+      >
+        Menus
+      </h3>
+      <div>
+        {menus.map((menu, index) => (
+          <div
+            key={menu.id}
+            style={{
+              textAlign: "center",
+              marginBottom: "20px",
+              marginTop: "70px",
+            }}
+          >
+            <div style={{ display: "flex" }}>
+              <img
+                src={`http://localhost:7000/public/images/${menu.picture}`}
+                alt={menu.foodname}
+                style={{ width: "233px", height: "100px" }}
+              />
+              <div style={{ marginLeft: "100px", textAlign: "left" }}>
+                <p>
+                  <strong>FoodName: </strong> {menu.foodname}
+                </p>
+                <p>
+                  <strong>Category: </strong>
+                  {menu.category}
+                </p>
+                <p>
+                  <strong>Description: </strong>
+                  {menu.description}
+                </p>
+                <p>
+                  <strong>Price: </strong> {menu.price} per person{" "}
+                </p>
+                <button
+                  onClick={() => addToCart(index)}
+                  style={{
+                    background: "green",
+                    padding: "5px",
+                    border: "2px solid black",
+                    marginTop: "5px",
+                  }}
+                >
+                  {menu.selected ? "Remove from Cart" : "Add to Cart"}
+                </button>
+              </div>
+            </div>
           </div>
         ))}
       </div>
+
+      <button
+        onClick={toCartPage}
+        style={{
+          background: "blue",
+          padding: "10px",
+          border: "2px solid black",
+          color: "white",
+          display: "block",
+          textAlign: "center",
+          marginTop: "20px",
+          marginBottom: "50px",
+        }}
+      >
+        Go to Cart
+      </button>
     </div>
   );
 };

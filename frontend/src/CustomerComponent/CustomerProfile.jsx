@@ -87,6 +87,7 @@ export default function CustomerProfile({user,onUpdateProfile}) {
           ></textarea>
           <br />
   
+          
           <label>Pincode</label>
         <input type = "number" className='pin' name="pincode" 
                   value={inputdata.pincode} onChange={handledata} 
