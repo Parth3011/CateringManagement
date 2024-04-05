@@ -3,12 +3,14 @@ import { useLocation } from "react-router-dom";
 
 const CartPage = () => {
   const location = useLocation();
-  const { selectedItems: initialSelectedItems = [], selectedEvent, numberOfPeople } = location.state || {};
+  const { selectedItems: initialSelectedItems = [], selectedEvent, numberOfPeople , caterer_id } = location.state || {};
+  console.log(caterer_id);
 
   const [selectedItems, setSelectedItems] = useState(initialSelectedItems);
   const [event, setEvent] = useState(selectedEvent);
   const [peopleCount, setPeopleCount] = useState(numberOfPeople);
 
+console.log(selectedItems);
   // Fetch selectedItems from URL query parameters on initial load
   useEffect(() => {
     const queryParams = new URLSearchParams(window.location.search);
@@ -60,6 +62,7 @@ const CartPage = () => {
       queryParams.set("totalPrice", totalPrice.toString());
       queryParams.set("numberOfPeople", peopleCount.toString());
       queryParams.set("event", event);
+      queryParams.set("caterer_id", caterer_id);
       window.location.href = `/customer/checkout?${queryParams.toString()}`;
     } else {
       // If there are no selected items, display a message

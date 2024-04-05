@@ -191,90 +191,103 @@ const signupcustomer = (req, resp) => {
 
 
 
+// const login = (req, resp) => {
+//     console.log(req.body);
+//     const { email, pass } = req.body;
+//     // let email = req.body.email;
+//     // let pwd = req.body.pwd;
+//     // let pwd = (req.body.pwd,10);
+//     console.log(typeof (pass));
+
+//     const errors = validationResult(req);
+//     // console.log(errors)
+//     if (!errors.isEmpty()) {
+//         return resp.status(400).json({ errors: errors.array() });
+//     }
+
+
+//     // Query to fetch user from login table
+//     let query = `SELECT * FROM login WHERE email = ?`;
+
+
+//     con.query(query, [email], async (err, result) => {
+//         //if (err) throw err;
+
+
+//         if (!result.length) {
+//             return resp.status(401).send({
+//                 msg: "email or passsord is incorrect"
+//             })
+//         }
+//         else {
+
+//             let query2 = `Select * FROM ${result[0]['role']}s where email = ?`
+//             console.log(query2);
+
+//             if (pass === result[0]['password'] && email === result[0]['email']) {
+//                 // const token = jwt.sign({id:results[0]['id'],role:results[0]['role']},JWT_SECRET,{expiresIn: '1h'});
+//                 con.query(query2, [email], async (err, results) => {
+
+//                     console.log(results[0]);
+
+//                     return resp.status(200).send({
+//                         msg: 'loggin',
+//                         Status: "Success",
+//                         // token,
+//                         user: results[0]
+//                     });
+                    
+//                 }
+//                 );
+//             };
+            
+//         }
+//     });
+// };
+
+
 const login = (req, resp) => {
     console.log(req.body);
     const { email, pass } = req.body;
-    // let email = req.body.email;
-    // let pwd = req.body.pwd;
-    // let pwd = (req.body.pwd,10);
-    console.log(typeof (pass));
 
     const errors = validationResult(req);
-    // console.log(errors)
     if (!errors.isEmpty()) {
         return resp.status(400).json({ errors: errors.array() });
     }
 
-
-    // Query to fetch user from login table
     let query = `SELECT * FROM login WHERE email = ?`;
 
-
     con.query(query, [email], async (err, result) => {
-        //if (err) throw err;
+        if (err) {
+            return resp.status(500).send({
+                msg: "Internal server error"
+            });
+        }
 
-
-        if (!result.length) {
+        if (!result.length || pass !== result[0].password) {
             return resp.status(401).send({
-                msg: "email or passsord is incorrect"
-            })
-        }
-        else {
-
-            let query2 = `Select * FROM ${result[0]['role']}s where email = ?`
-            console.log(query2);
-
-            if (pass === result[0]['password'] && email === result[0]['email']) {
-                // const token = jwt.sign({id:results[0]['id'],role:results[0]['role']},JWT_SECRET,{expiresIn: '1h'});
-                con.query(query2, [email], async (err, results) => {
-
-                    console.log(results[0]);
-
-                    return resp.status(200).send({
-                        msg: 'loggin',
-                        Status: "Success",
-                        // token,
-                        user: results[0]
-                    });
-
-                }
-                );
-            };
-            
+                msg: "Email or password is incorrect"
+            });
         }
 
+        let query2 = `SELECT * FROM ${result[0].role}s WHERE email = ?`;
 
-        // console.log(result[0]);
-        // console.log(pwd);
+        con.query(query2, [email], async (err, results) => {
+            if (err) {
+                return resp.status(500).send({
+                    msg: "Internal server error"
+                });
+            }
 
-        // bcrypt.compare(pwd, results[0].password), (error, isMatch)=> {
-        //   if(error){
-        //     return resp.status(400).send({
-        //       msg:error
-        //     });
-        //   }
-        //   if(isMatch){
-        //     console.log(JWT_SECRET);
-        //   }
-
-        // }
-
-        // bcrypt.hash(pwd, 10, (err, hash) => {
-        //   if (err) {
-        //       return resp.status(400).send({
-        //           msg: "Error for Hassing pwd"
-        //       });
-        //   }else{
-        //     pwd = con.escape(hash);
-        //     console.log(pwd);
-        //   }});
-
-        // console.log(results[0].password);
-        // return resp.status(401).send({
-        //     msg: "email or pwd is incorrect"
-        // })
+            return resp.status(200).send({
+                msg: 'Logged in successfully',
+                status: "Success",
+                user: results[0]
+            });
+        });
     });
 };
+
 
 
 module.exports = {

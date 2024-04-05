@@ -1,78 +1,58 @@
 const { validationResult } = require("express-validator");
-let express = require("express");
-const con = require("../config/dbConnection");
-const bcrypt = require('bcrypt');
-const bodyParser = require('body-parser');
-
-
-
-const app = express();
-
-
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-
-
-
-
-
+const con = require('../config/dbConnection');
+const bcrypt = require('bcryptjs');
 
 const login = (req, resp) => {
-    let { email,pwd } = req.body;
-    // const password = bcrypt.hashSync(pwd, 10);
-    // pwd = `${con.escape(req.body.pwd)}`;
+  // Extract email and password from request body
+  let email = req.body.email;
+  let password = req.body.pwd;
 
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return resp.status(400).json({ errors: errors.array() });
+  // SQL query to fetch user data by email
+  const sql = `SELECT * FROM customers WHERE email = ?`;
+
+  // Execute the SQL query
+  con.query(sql, [email], (err, result) => {
+    if (err) {
+      console.error('Error:', err);
+      return resp.status(500).json({ msg: 'Internal server error' });
     }
 
-  
-    con.query('SELECT * FROM login WHERE email = ?', [email], (err, results) => {
+    // Check if user with the provided email exists
+    if (result.length === 0) {
+      return resp.status(404).json({ msg: 'User not found' });
+    }
+
+    // Retrieve hashed password from database
+    const hashedPassword = result[0].password;
+
+    // Log the hashed password and password provided during login for debugging
+    console.log('Hashed Password:', hashedPassword);
+    console.log('Password Provided:', password);
+
+    const trimmedHashedPassword = hashedPassword.trim();
+    const trimmedProvidedPassword = password.trim();
+
+    // Compare provided password with hashed password
+    bcrypt.compare(trimmedProvidedPassword, trimmedHashedPassword, (err, isMatch) => {
       if (err) {
-        console.error('Error querying database:', err);
-        resp.status(500).json({ error: 'Internal server error' });
-        return;
+        console.error('Error:', err);
+        return resp.status(500).json({ msg: 'Internal server error' });
       }
-  
 
-      if (results.length === 0) {
-        resp.status(404).json({ error: 'User not found' });
-        return;
+      // Log the result of the password comparison
+      console.log('Password Comparison Result:', isMatch);
+
+      // Check if passwords match
+      if (!isMatch) {
+        return resp.status(401).json({ msg: 'Invalid credentials' });
       }
-  
-      const user = results[0];
 
-    //   pwd = pwd.toString();
-    //   console.log(pwd);
-
-      bcrypt.compare(pwd, user['password'], (err, isMatch) => {
-        if (err) {
-          console.error('Error comparing passwords:', err);
-          resp.status(500).json({ error: 'email or password are incorrect' });
-          return;
-        }
-
-        console.log('Provided Password:', pwd);
-        console.log('Stored Hashed Password:', user['password']);
-
-        if (isMatch) {
-          // You can perform additional actions here, such as generating a JWT token for authentication
-          resp.status(200).json({ message: 'Login successful' });
-        } else {
-            // console.log(email);
-            // console.log(pwd);
-            console.log(isMatch);
-            // console.log(user.password);
-          resp.status(401).json({ error: 'Error or password are incorrect' });
-        }
-      });
+      // Passwords match, login successful
+      return resp.status(200).json({ msg: 'Login successful', user: result[0] });
     });
-  };
-
-
-
+  });
+};
 
 module.exports = {
-    login
-}
+  login
+};

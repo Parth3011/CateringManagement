@@ -29,19 +29,20 @@ import CatererHome from "../CatererComponent/CatererHome";
 import CustomerHome from "../CustomerComponent/CustomerHome";
 import Caterermenudetails from "../CustomerComponent/Caterermenudetails";
 import CartPage from "../CustomerComponent/CartPage";
+import Order from "../CustomerComponent/Order";
+import Payment from "../CustomerComponent/Payment";
+import Orderdetail from "../CatererComponent/Orderdetail";
 // import LogoutOutlet from "../Component/Logout";
 
 
 export default function Home() {
-  // const [user, setuser] = useState(null);
-  // console.log(user);
+  const [orderId, setOrderId] = useState(localStorage.getItem("orderId"));
 
-  // useEffect(() => {
-  //   // Check if user is not null before logging
-  //   if (user !== null) {
-  //     console.log("User state changed:", user);
-  //   }
-  // }, [user]);
+  const handleOrderPlaced = (orderId) => {
+    setOrderId(orderId);
+    localStorage.setItem("orderId", orderId);
+  };
+
 
   const [user, setuser] = useState(() => {
     // Retrieve user from localStorage
@@ -104,7 +105,7 @@ export default function Home() {
             <Route path="menu" element={<Menus user={user}/>} />
             <Route path="UpdateMenu/:id" element={<UpdateMenu />} />
             <Route path="catererMenu" element={<CatererMenu user={user}/>}/>
-            <Route path="order" element={<p>Order</p>} />
+            <Route path="order" element={<Orderdetail orderId={orderId} />} />
             <Route path="profile" element={<CatererProfile user={user} onUpdateProfile={onUpdateProfile}/>} />
             <Route path="logout" element={<Logout onLogout={onLogout} />} />
             <Route path="*" element={<h1>404 Page</h1>} />
@@ -116,7 +117,8 @@ export default function Home() {
             <Route path="cmenu/:caterer_id" element={<Caterermenudetails />} />
             <Route path="cart" element={<CartPage />} />
             <Route path="checkout" element={<Checkout />} />
-            <Route path="payment" element={<p>Paymentdone</p>} />
+            <Route path="order" element={<Order user={user} onOrderPlaced={handleOrderPlaced}/>} />
+            <Route path="payment" element={<Payment/>} />
             <Route path="profile" element={<CustomerProfile user={user} onUpdateProfile={onUpdateProfile}/>} />
             <Route path="logout" element={<Logout onLogout={onLogout} />} />
             <Route path="*" element={<h1>404 Page</h1>} />

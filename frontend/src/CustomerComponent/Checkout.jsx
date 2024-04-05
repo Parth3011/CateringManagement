@@ -4,7 +4,6 @@ import "../Css/checkout.css";
 import axios from "axios";
 
 export default function Checkout() {
-
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
 
@@ -13,73 +12,72 @@ export default function Checkout() {
   const totalPrice = parseFloat(queryParams.get("totalPrice"));
   const numberOfPeople = parseInt(queryParams.get("numberOfPeople"));
   const event = queryParams.get("event");
+  const catererId = queryParams.get("caterer_id"); // Retrieve caterer_id
 
   console.log(items);
   console.log(totalPrice);
   console.log(numberOfPeople);
   console.log(event);
+  console.log(catererId); // Log caterer_id
 
-
-  // const [name, setName] = useState("");
   const [time, setTime] = useState("");
   const [date, setDate] = useState("");
   const [address, setAddress] = useState("");
-  // const [pid, setPid] = useState("");
   const [state, setState] = useState("");
   const [city, setCity] = useState("");
-  
-  
+
   const navigate = useNavigate();
 
-  const handlesubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (time && date && address && city && state) { // Check if all fields are filled
-      const confirmation = window.confirm("Are you sure you want to proceed with the booking?");
+    if (time && date && address && city && state) {
+      const confirmation = window.confirm(
+        "Are you sure you want to proceed with the booking?"
+      );
       if (confirmation) {
-        const bookingData = {
-          items,
-          totalPrice,
-          numberOfPeople,
-          event,
-          time,
-          date,
-          address,
-          city,
-          state,
-        };
+        const foodNamesString = items.map((item) => item.foodname).join(", ");
+      const menuIdsString = items.map((item) => item.id).join(",");
 
-        try {
-          const response = await axios.post('http://localhost:7000/api/events', bookingData);
-          if (response.status === 200) {
-            alert("Booking successful");
-            navigate("/customer/payment");
-          }
+      const bookingData = {
+        items: foodNamesString,
+        menu_id: menuIdsString, // Include menu ids
+        totalPrice,
+        numberOfPeople,
+        event,
+        catererId,
+        time,
+        date,
+        address,
+        city,
+        state,
+      };
+      try {
+        const response = await axios.post(
+          "http://localhost:7000/api/events",
+          bookingData
+        );
+        if (response.status === 200) {
+          const eventId = response.data.eventId; // Get the event ID from the response
+          alert("Now you can proceed with Order.");
+          navigate(`/customer/order`, { state: { ...bookingData, eventId } });
         }
-        catch (error) {
-          console.error('Error:', error);
-          // Display an error message to the user
+        } catch (error) {
+          console.error("Error:", error);
         }
-    // } else {
-    //   alert("Please fill in all details before proceeding.");
-     }
+      }
+    }
   };
-}
-
 
   return (
     <div className="registration">
       <div className="square">
-        {/* <label>Full Name</label>
-                <input type="text" className='name' name="name"
-                    value={name} onChange={(e) => { setName(e.target.value) }}
-                /><br /> */}
-
         <label>Date</label>
         <input
           type="date"
           className="date"
           name="date"
           value={date}
+          min={(new Date()).toISOString().split('T')[0]}
           onChange={(e) => {
             setDate(e.target.value);
           }}
@@ -110,11 +108,6 @@ export default function Checkout() {
         ></textarea>
         <br />
 
-        {/* <label>Product Id</label>
-                <input type="number" className='pid' name="pid"
-                    value={pid} onChange={(e) => { setPid(e.target.value) }}
-                /><br /> */}
-
         <label>City</label>
         <input
           type="text"
@@ -143,7 +136,7 @@ export default function Checkout() {
           type="submit"
           className="book bg-success"
           value="Book"
-          onClick={handlesubmit}
+          onClick={handleSubmit}
         />
       </div>
     </div>

@@ -43,22 +43,32 @@ const upload = multer({
 
 
 
+  // Checking purpose
 
+// const login = require("../controllers/login");
+//  const customerController= require("../controllers/customerController");
+// const loginController = require("../controllers/loginController");
+// const forgetpassword = require("../controllers/forgetpassword");
+
+// normally
 
 // const { signupcustomer,login } = require("../controllers/userController");
+// const {menuvalidation} = require("../helpers/validation");
+
+// IMP
+
 const menuController = require("../controllers/menuController");
-// const loginController = require("../controllers/loginController");
 const userController = require("../controllers/userController");
-//  const customerController= require("../controllers/customerController");
 const catererController = require("../controllers/catererController");
 const adminController = require("../controllers/adminController");
-const login = require("../controllers/login");
-const forgetpassword = require("../controllers/forgetpassword");
 const Forget = require("../controllers/Forget");
 const catererdetailes = require("../controllers/admin/catererdetailes");
 const customerdetailes = require("../controllers/admin/customerdetailes");
 const profile = require("../controllers/Profile/profile");
-// const {menuvalidation} = require("../helpers/validation");
+
+
+
+
 
 
 
@@ -66,15 +76,15 @@ const profile = require("../controllers/Profile/profile");
 const { getcustomermenu } = require("../controllers/customer/Firstpage");
 const { getcatererinfo, getmenusdetails } = require("../controllers/customer/Secondpage");
 const { event } = require("../controllers/customer/ThirdPage");
+const { order } = require("../controllers/customer/Fourpage");
+const { orderdetails } = require("../controllers/customer/Fifthpage");
 
 
 
+// checking purpose
 
-
-
-
-
-
+// router.post("/signupcustomer",signupvalidation,customerController.signupcustomer);
+// router.post("/login",login.login);
 
 //post
 
@@ -82,8 +92,12 @@ router.post("/login", loginvalidation, userController.login);
 router.post("/signupcustomer", signupvalidation, userController.signupcustomer);
 router.post("/signupcaterer", signupvalidation, catererController.signupcaterer);
 router.post("/signupadmin", signupvalidation, adminController.signupadmin);
-// router.post("/signupcustomer",signupvalidation,customerController.signupcustomer);
-// router.post("/login",loginvalidation,login.login);
+
+
+// router.post("/verifypassword", Forget.verifyPasswordReset);
+router.get("/resetpassword", Forget.resetpassword);
+
+
 router.post("/forgetpassword", Forget.forgetpassword);
 router.get("/catererdetailes", catererdetailes.getCatererDetail);
 router.get("/customerdetailes", customerdetailes.getCustomerDetail);
@@ -111,6 +125,9 @@ router.put('/updatecatererprofile', profile.updateCatererDetailes)
 
   //customer ThirdPage
   router.post('/events',event);
+  router.post('/order',order);
+
+  router.get("/orders/:orderId",orderdetails);
 
 
 

@@ -1,121 +1,124 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../Css/login.css';
-// import { useEffect } from 'react';
-
 import axios from 'axios';
 
-export default function Login({UserData}) {
-
+export default function Login({ UserData }) {
   const navigate = useNavigate();
-  // const [flag,setFlag] = useState("false");
-  
-  const data ={email:"",pass:""};
-  const [inputdata,setinputData] = useState(data);
+  const [inputData, setInputData] = useState({ email: "", pass: "" });
+  const [errors, setErrors] = useState({ email: "", pass: "" });
+  const [loginError, setLoginError] = useState("");
 
-  // useEffect(()=>{
-  //   axios.get("")
-  //   .then((resp)=>{
-  //     console.log(resp);
-  //   })
-  // },[]);
+  const handleData = (e) => {
+    const { name, value } = e.target;
+    setInputData({ ...inputData, [name]: value });
+    
+    // Check for validation errors
+    const errorsCopy = { ...errors };
+    if (name === 'email') {
+      if (!value) {
+        errorsCopy.email = "Email is required";
+      } else {
+        // Basic email format validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(value)) {
+          errorsCopy.email = "Please enter a valid email address";
+        } else {
+          errorsCopy.email = "";
+        }
+      }
+    } else if (name === 'pass') {
+      if (value.length < 5) {
+        errorsCopy.pass = "Password must be at least 5 characters long";
+      } else {
+        errorsCopy.pass = "";
+      }
+    }
 
-  const handledata = (e)=>{
-    setinputData({...inputdata,[e.target.name]:e.target.value});
-  }
+    setErrors(errorsCopy);
+  };
 
-  const handlesubmit =  (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-       axios.post('http://localhost:7000/api/login', inputdata)
-      .then((resp) => {
-        // console.log(resp)
-        console.log(resp);
-        if(resp.data.user.role==='customer'){
-          console.log(true);
-          navigate('/customer')
-        }
-        if(resp.data.user.role==='admin'){
-          console.log(true);
-          navigate('/admin')
-        }
-        if(resp.data.user.role==='caterer'){
-          console.log(true);
-          navigate('/caterer')
-        }
-        // console.log(resp.data.user.role)
-        console.log(resp.data.user);
-        UserData(resp.data.user);
-        console.log(resp.data.user);
-      })
-      // .then((err) => console.log(err))
-    } catch (e) {
-      console.error('Error submitting form:', e);
-      alert('An error occurred while submitting the form');
+    if (inputData.email && inputData.pass) {
+      try {
+        axios.post('http://localhost:7000/api/login', inputData)
+          .then((resp) => {
+            if (resp.data.user.role === 'customer') {
+              navigate('/customer')
+            }
+            if (resp.data.user.role === 'admin') {
+              navigate('/admin')
+            }
+            if (resp.data.user.role === 'caterer') {
+              navigate('/caterer')
+            }
+            UserData(resp.data.user);
+          })
+          .catch((error) => {
+            console.error('Error submitting form:', error);
+            alert("Email or password is incorrect");
+          });
+      } catch (error) {
+        console.error('Error submitting form:', error);
+        setLoginError("An error occurred while submitting the form");
+      }
+    } else {
+        alert("Please fill in both email and password fields");
     }
   };
 
   return (
     <div>
-      <div style={{backgroundColor:"black",height:"50px"}}>Login</div>
-    <div className='container'>
-      <section className="">
-        <div className="">
-          <div className="row d-flex justify-content-center align-items-center h-50">
-            <div className="col col-xl-10">
-              <div className="card" style={{ borderRadius: "1rem" }}>
-                <div className="row g-0">
-                  <div className="col-md-6 col-lg-5 d-none d-md-block">
-                    <img src="https://media.istockphoto.com/id/650655146/photo/catering-food-wedding-event-table.jpg?s=612x612&w=0&k=20&c=ATGYgW8bM_559jJ5aUNO4HlJqpkOWUmNNMMflx5kajo="
-                      alt="login form" className="img" style={{ borderRadius: "1rem 0 0 1rem" }} />
-                  </div>
-                  <div className="col-md-6 col-lg-7 d-flex align-items-center">
-                    <div className="card-body p-4 p-lg-5 text-black">
-
-                      <form>
-
-                        <div className="d-flex align-items-center mb-3 pb-1">
-                          < img alt="logo" className="logo" src='https://www.shutterstock.com/shutterstock/photos/1984672004/display_1500/stock-vector-catering-quality-food-design-premium-logo-1984672004.jpg' />
-                        </div>
-
-                        <h5 className="fw-normal mb-3 pb-3" style={{ letterSpacing: "1px" }}>Sign into your account</h5>
-
-                        <div className="form-outline mb-4">
-                          <label className="form-label" htmlFor="form2Example17">Email address</label>
-                          <input type="email" id="form2Example17" className="form-control form-control-lg" name="email" value={inputdata.email} onChange={handledata} />
-                        </div>
-
+      <div style={{ backgroundColor: "black", height: "50px" }}>Login</div>
+      <div className='container'>
+        <section className="">
+          <div className="">
+            <div className="row d-flex justify-content-center align-items-center h-50">
+              <div className="col col-xl-10">
+                <div className="card" style={{ borderRadius: "1rem" }}>
+                  <div className="row g-0">
+                    <div className="col-md-6 col-lg-5 d-none d-md-block">
+                      <img src="https://media.istockphoto.com/id/650655146/photo/catering-food-wedding-event-table.jpg?s=612x612&w=0&k=20&c=ATGYgW8bM_559jJ5aUNO4HlJqpkOWUmNNMMflx5kajo="
+                        alt="login form" className="img" style={{ borderRadius: "1rem 0 0 1rem" }} />
+                    </div>
+                    <div className="col-md-6 col-lg-7 d-flex align-items-center">
+                      <div className="card-body p-4 p-lg-5 text-black">
+                        <form>
+                          <div className="d-flex align-items-center mb-3 pb-1">
+                            <img alt="logo" className="logo" src='https://www.shutterstock.com/shutterstock/photos/1984672004/display_1500/stock-vector-catering-quality-food-design-premium-logo-1984672004.jpg' />
+                          </div>
+                          <h5 className="fw-normal mb-3 pb-3" style={{ letterSpacing: "1px" }}>Sign into your account</h5>
                           <div className="form-outline mb-4">
-                          <label className="form-label" htmlFor="form2Example27">Password</label>
-                          <input type="password" id="form2Example27" className="form-control form-control-lg" name="pass" value={inputdata.pass} onChange={handledata} />
-                        </div>
-
-
+                            <label className="form-label" htmlFor="form2Example17">Email address</label>
+                            <input type="email" id="form2Example17" className={`form-control form-control-lg ${errors.email ? 'is-invalid' : ''}`} name="email" value={inputData.email} onChange={handleData} />
+                            {errors.email && <div className="invalid-feedback">{errors.email}</div>}
+                          </div>
+                          <div className="form-outline mb-4">
+                            <label className="form-label" htmlFor="form2Example27">Password</label>
+                            <input type="password" id="form2Example27" className={`form-control form-control-lg ${errors.pass ? 'is-invalid' : ''}`} name="pass" value={inputData.pass} onChange={handleData} />
+                            {errors.pass && <div className="invalid-feedback">{errors.pass}</div>}
+                          </div>
                           <div className="pt-1 mb-4">
-                            <button className="bg-black btn btn-dark btn-lg btn-block" type="button" onClick={handlesubmit}>Login</button><br />
-
-
+                            <button className="bg-black btn btn-dark btn-lg btn-block" type="button" onClick={handleSubmit}>Login</button><br />
                             <Link className="small text-muted" to="/forgetpassword">Forgot password?</Link>
-                          </div><br />
-
-
+                          </div>
+                          {loginError && <div className="text-danger">{loginError}</div>}
+                          <br />
                           <p className="mb-5 pb-lg-2" style={{ color: "#393f81" }}>Don't have an account?
-                            <Link to="/signup1" style={{ color: "#393f81" ,marginLeft:"10px"}}>Register Caterer</Link>
+                            <Link to="/signup1" style={{ color: "#393f81", marginLeft: "10px" }}>Register Caterer</Link>
                             <Link to="/signup2" style={{ color: "#393f81", marginLeft: "33px" }}>Register Customer</Link>
-                            {/* <Link to="/signupadmin" style={{ color: "#393f81", marginLeft: "33px" }}>Register admin</Link> */}
                           </p>
-                      </form>
+                        </form>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
-      {/* <Outlet /> */}
+        </section>
+      </div>
     </div>
-    </div>
-  )
+  );
 }
-

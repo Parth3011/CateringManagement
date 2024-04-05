@@ -60,6 +60,7 @@ const Caterermenudetails = () => {
         selectedItems,
         selectedEvent,
         numberOfPeople,
+        caterer_id: caterer_id,
       },
     });
   };

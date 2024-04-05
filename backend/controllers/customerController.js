@@ -1,93 +1,73 @@
-// const bcrypt = require('bcryptjs');
-
 const { validationResult } = require("express-validator");
-const express = require("express");
-const con = require("../config/dbConnection");
-const bcrypt = require('bcrypt');
-const bodyParser = require('body-parser');
-
-
-
-const app = express();
-
-
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-
+const con = require('../config/dbConnection');
+const bcrypt = require('bcryptjs');
 
 const signupcustomer = (req, resp) => {
-    const { uname, email, pwd, confirm, phone, address, pin, state, city } = req.body;
+  // Extract data from request body
+  let name = req.body.name;
+  let email = req.body.email;
+  let password = req.body.pwd; // Assuming this is the password field
+  let confirm = req.body.confirm;
+  let phone = req.body.phone;
+  let address = req.body.address;
+  let pincode = req.body.pincode;
+  let state = req.body.state;
+  let city = req.body.city;
+  let role = 'customer';
 
-    const role = 'customer';
+  const sql1 = `INSERT INTO login (customer_id,email,password,role) VALUES(?,?,?,?)`;
+  const sql = `INSERT INTO customers (name,email,password,confirmpassword,phone,address,pincode,city,state,role) VALUES(?,?,?,?,?,?,?,?,?,?)`;
 
-    const errors = validationResult(req);
+  // Check for validation errors
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return resp.status(400).json({ errors: errors.array() });
+  }
 
-
-    if (!errors.isEmpty()) {
-        return resp.status(400).json({ errors: errors.array() });
+  // Hash the password
+  bcrypt.hash(password, 10, (err, hash) => {
+    if (err) {
+      return resp.status(500).json({ msg: "Error hashing password" });
     }
 
-    con.query(
-        `SELECT * FROM customers WHERE LOWER(email) = LOWER(${con.escape(email)});`,
-        (err, result) => {
-            if (result && result.length) {
-                return resp.status(409).send({
-                    msg: "This user is already in use!"
-                });
-            }
-            else {
-                bcrypt.genSalt(10,(err,salt)=>{
-                    //     bcrypt.hash(pwd,salt, (err, hash) 
-                bcrypt.hash(pwd, salt, (err, hash) => {
-                    if (err) {
-                        resp.status(500).json({ error: 'Hassing error' });
-                    } else {
-                        const register = {
-                            name: uname,
-                            email: email,
-                            password: hash,
-                            confirmpassword: confirm,
-                            phone: phone,
-                            address: address,
-                            pincode: pin,
-                            state: state,
-                            city: city,
-                            role: role
-                        };
+    // Remove password from userData object
+    const userData = {
+        name: name,
+        email: email,
+        confirm: confirm,
+        phone: phone,
+        address: address,
+        pincode: pincode,
+        state: state,
+        city: city,
+        role: role
+    };
 
+    // Store user data with hashed password
+    con.query(sql, [name, email, hash, confirm, phone, address, pincode, state, city, role], (err, data) => {
+      if (err) {
+        console.log(err);
+        return resp.status(400).json({ msg: "Error: " + err });
+      }
 
+      // Store login information with hashed password
+      con.query(sql1, [data.insertId, email, hash, role], (err, result) => {
+        if (err) {
+          console.log(err);
+          return resp.status(400).json({ msg: err });
+        }
 
-                        con.query('INSERT INTO customers SET ?', register, (err, result) => {
-                            if (err) {
-                                console.log(err);
-                                resp.status(500).json({ error: 'why Failed to register user' });
-                            }
-                            else {
-                                const login = {
-                                    customer_id: result.insertId,
-                                    email: email,
-                                    password: hash,
-                                    role: role
-                                }
-                                con.query('INSERT INTO login SET ?', login, (err, result) => {
-                                    if (err) {
-                                        resp.status(500).json({ error: 'Failed to register user' });
-                                    }
-                                    else {
-                                        resp.status(200).json({ message: 'User registered successfully' });
-                                    }
-                                });
-                            }
-                        });
-                    }
-                });
-                });
-            }
+        // Registration successful
+        return resp.status(200).send({
+            Status: "Success",
+            msg: "The user has been registered with us",
+            user: userData
         });
+      });
+    });
+  });
 }
-
-
 
 module.exports = {
-    signupcustomer
-}
+  signupcustomer
+};
