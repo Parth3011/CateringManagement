@@ -30,7 +30,7 @@ const signupcaterer = (req, resp) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return resp.status(400).json({ errors: errors.array() });
-    }
+    }   
 
     const userData = {
         name: req.body.name,
@@ -49,11 +49,11 @@ const signupcaterer = (req, resp) => {
 
     con.query(
        
-          `SELECT * FROM caterers WHERE LOWER(email) = LOWER(${con.escape(email)});`,
+          `SELECT * FROM caterers WHERE LOWER(email) = LOWER(${con.escape(email)});`&&`SELECT * FROM login WHERE LOWER(email) = LOWER(${con.escape(email)});`,
        
         (err, result) => {
             if (result && result.length) {
-                return resp.status(409).send({
+                return resp.send({
                     msg: "This user is already in use!"
                 });
             }

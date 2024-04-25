@@ -1,75 +1,70 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import '../Css/admintable.css';
+import "../Css/admintable.css";
 
 const Caterer = () => {
-  const [re , setre] = useState(false);
+  const [re, setRe] = useState(false);
   const [catererData, setCatererData] = useState([]);
 
   useEffect(() => {
-    const dbData = async () => {
+    const fetchData = async () => {
       try {
-        const res = await axios.get(
-          "http://localhost:7000/api/catererdetailes"
-        );
+        const res = await axios.get("http://localhost:7000/api/catererdetailes");
         setCatererData(res.data);
-        console.log(res);
       } catch (error) {
         console.log(error);
       }
     };
-    dbData();
+    fetchData();
   }, [re]);
 
   const handleDelete = async (id) => {
-    const confirmdelete = window.confirm("Are you sure you want to delete?");
+    const confirmDelete = window.confirm("Are you sure you want to delete?");
     try {
-      if(confirmdelete){
-      await axios.delete(
-        `http://localhost:7000/api/deletecaterer/${id}`
-      )
-      .then(() => (console.log("deleted Successfully")))
-        .then(() => (setre((prev) => !prev)));}
+      if (confirmDelete) {
+        await axios.delete(`http://localhost:7000/api/deletecaterer/${id}`);
+        console.log("Deleted Successfully");
+        setRe((prev) => !prev);
+      }
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   return (
-    <div>
-      <div style={{height:"500px",overflow:"auto"}}>
-              <table style={{ backgroundColor: "lightblue",marginLeft:"30%",marginTop:"100px",borderCollapse: "collapse"}}>
-        <thead >
-          <tr style={{backgroundColor:"yellow"}}>
-            <td>No.</td>
-            <td>Name</td>
-            <td>OrderId</td>
-            <td>Phone No.</td>
-            <td>Address</td>
-            <td>City</td>
-            <td>State</td>
-            <td>Action</td>
-          </tr>
-        </thead>
-        <tbody>
-        {catererData.map((data) => (
-          <tr key={data.caterer_id}>
-            <td>{data.caterer_id}</td>
-            <td>{data.name}</td>
-            <td>OrderId</td>
-            <td>{data.phone}</td>
-            <td>{data.address}</td>
-            <td>{data.city}</td>
-            <td>{data.state}</td>
-            <td>
-              <button style={{border:"2px solid black",width:"100px",backgroundColor:"red"}}onClick={() => handleDelete(data.caterer_id)}>Delete</button>
-            </td>
-          </tr>
-        ))}
-        </tbody>
-      </table>
+    <div style={{ display: "flex", justifyContent: "center", marginTop: "100px" }}>
+      <div style={{ height: "500px", overflow: "auto" }}>
+        <table className="admin-table">
+          <thead>
+            <tr className="admin-table-header">
+              <th>No.</th>
+              <th>Name</th>
+              <th>Order ID</th>
+              <th>Phone No.</th>
+              <th>Address</th>
+              <th>City</th>
+              <th>State</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {catererData.map((data) => (
+              <tr key={data.caterer_id}>
+                <td>{data.caterer_id}</td>
+                <td>{data.name}</td>
+                <td>{data.order_ids}</td>
+                <td>{data.phone}</td>
+                <td>{data.address}</td>
+                <td>{data.city}</td>
+                <td>{data.state}</td>
+                <td>
+                  <button className="delete-button" onClick={() => handleDelete(data.caterer_id)}>Delete</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
-
     </div>
   );
 };

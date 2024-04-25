@@ -16,39 +16,111 @@ export default function SignupCustomer({datauser}) {
     state: "",
   };
   const [inputdata, setinputData] = useState(data);
+  const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
 
   const handledata = (e) => {
     setinputData({ ...inputdata, [e.target.name]: e.target.value });
   };
-  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    // if (uname === "" || fullname === "" || pwd === "" || confirm === "" || phone === "" || address === "" || pin === "" || city === "" || state === "") {
-    //   alert("plz fill all the details");
-    // }
-    // else{
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      axios
-        .post("http://localhost:7000/api/signupcustomer", inputdata)
-        .then((resp) => {
-          console.log(resp.data.user);
-          console.log(resp.data.Status);
-          if (resp.data.Status === "Success") {
-            navigate("/customer");
-            datauser(resp.data.user);
-          }
-          else{
-            console.log("hi here");
-            alert("registration is invalid");
-          }
-        })
-    } catch (e) {
-      console.error("Error submitting form:", e);
-      alert("An error occurred while submitting the form");
+    if (validateForm()) {
+      try {
+        const resp = await axios.post("http://localhost:7000/api/signupcustomer", inputdata);
+        alert("Registration Successful");
+        if (resp.data.Status === "Success") {
+          navigate("/customer");
+          datauser(resp.data.user);
+        } else if (resp.data.msg === "This user is already in use!") {
+            alert("Email already exists. Please use a different email address.");
+        } else {
+          alert("Registration is invalid");
+        }
+      } catch (error) {
+        console.error("Error submitting form:", error);
+        alert("An error occurred while submitting the form");
+      }
     }
   };
-// }
+
+  const validateForm = () => {
+    let errors = {};
+    let formIsValid = true;
+
+    if (!inputdata.name) {
+      formIsValid = false;
+      errors.name = "Please enter your username.";
+    }
+
+    if (!inputdata.email) {
+      formIsValid = false;
+      errors.email = "Please enter your email address.";
+    } else {
+      let pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!pattern.test(inputdata.email)) {
+        formIsValid = false;
+        errors.email = "Please enter a valid email address.";
+      }
+    }
+
+    if (!inputdata.pwd) {
+      formIsValid = false;
+      errors.pwd = "Please enter your password.";
+    } else if (inputdata.pwd.length < 5) {
+      formIsValid = false;
+      errors.pwd = "Password must be at least 5 characters long.";
+    }
+
+    if (!inputdata.confirm) {
+      formIsValid = false;
+      errors.confirm = "Please confirm your password.";
+    } else if (inputdata.pwd !== inputdata.confirm) {
+      formIsValid = false;
+      errors.confirm = "Passwords do not match.";
+    }
+
+    if (!inputdata.phone) {
+      formIsValid = false;
+      errors.phone = "Please enter your phone number.";
+    } else {
+      let pattern = /^\d{10}$/;
+      if (!pattern.test(inputdata.phone)) {
+        formIsValid = false;
+        errors.phone = "Please enter a valid phone number.";
+      }
+    }
+
+    if (!inputdata.address) {
+      formIsValid = false;
+      errors.address = "Please enter your address.";
+    }
+
+    if (!inputdata.pincode) {
+      formIsValid = false;
+      errors.pincode = "Please enter your pincode.";
+    } else {
+      let pattern = /^\d{6}$/;
+      if (!pattern.test(inputdata.pincode)) {
+        formIsValid = false;
+        errors.pincode = "Please enter a valid pincode.";
+      }
+    }
+
+    if (!inputdata.city) {
+      formIsValid = false;
+      errors.city = "Please enter your city.";
+    }
+
+    if (!inputdata.state) {
+      formIsValid = false;
+      errors.state = "Please enter your state.";
+    }
+
+    setErrors(errors);
+    return formIsValid;
+  };
+
   return (
     <div className="registration">
       <h1>Registration Customer</h1>
@@ -61,6 +133,7 @@ export default function SignupCustomer({datauser}) {
           value={inputdata.name}
           onChange={handledata}
         />
+        <span className="error" style={{ color: 'red' }}>{errors.name}</span>
         <br />
 
         <label>Email</label>
@@ -71,6 +144,7 @@ export default function SignupCustomer({datauser}) {
           value={inputdata.email}
           onChange={handledata}
         />
+        <span className="error" style={{ color: 'red' }}>{errors.email}</span>
         <br />
 
         <label>Password</label>
@@ -81,6 +155,7 @@ export default function SignupCustomer({datauser}) {
           value={inputdata.pwd}
           onChange={handledata}
         />
+        <span className="error" style={{ color: 'red' }}>{errors.pwd}</span>
         <br />
 
         <label>Confirm Password</label>
@@ -91,16 +166,18 @@ export default function SignupCustomer({datauser}) {
           value={inputdata.confirm}
           onChange={handledata}
         />
+        <span className="error" style={{ color: 'red' }}>{errors.confirm}</span>
         <br />
 
         <label>Phone No.</label>
         <input
-          type="number"
+          type="text"
           className="phone"
           name="phone"
           value={inputdata.phone}
           onChange={handledata}
         />
+        <span className="error" style={{ color: 'red' }}>{errors.phone}</span>
         <br />
 
         <label>Address</label>
@@ -111,16 +188,18 @@ export default function SignupCustomer({datauser}) {
           value={inputdata.address}
           onChange={handledata}
         ></textarea>
+        <span className="error" style={{ color: 'red' }}>{errors.address}</span>
         <br />
 
         <label>Pincode</label>
         <input
-          type="number"
+          type="text"
           className="pin"
           name="pincode"
           value={inputdata.pincode}
           onChange={handledata}
         />
+        <span className="error" style={{ color: 'red' }}>{errors.pincode}</span>
         <br />
 
         <label>City</label>
@@ -131,6 +210,7 @@ export default function SignupCustomer({datauser}) {
           value={inputdata.city}
           onChange={handledata}
         />
+        <span className="error" style={{ color: 'red' }}>{errors.city}</span>
         <br />
 
         <label>State</label>
@@ -141,6 +221,7 @@ export default function SignupCustomer({datauser}) {
           value={inputdata.state}
           onChange={handledata}
         />
+        <span className="error" style={{ color: 'red' }}>{errors.state}</span>
         <br />
 
         <input
@@ -153,15 +234,3 @@ export default function SignupCustomer({datauser}) {
     </div>
   );
 }
-
-// const [uname, setUname] = useState("");
-// const[ownerid,setOwnerid] = useState("");
-// const [email, setEmail] = useState("");
-// const[company,setCompany] = useState("");
-// const [pwd, setPwd] = useState("");
-// const [confirm, setConfirm] = useState("");
-// const [phone, setPhone] = useState("");
-// const [address, setAddress] = useState("");
-// const [pin, setPin] = useState("");
-// const [city, setCity] = useState("");
-// const [state, setState] = useState("");

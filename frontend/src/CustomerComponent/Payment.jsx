@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import { useLocation } from "react-router-dom";
-import axios from "axios";
+import axios from 'axios';
 
 const Payment = () => {
   const location = useLocation();
-  const { orderId } = location.state;
   const [orderDetails, setOrderDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { orderId } = location.state;
 
   useEffect(() => {
     const fetchOrderDetails = async () => {
@@ -24,6 +24,64 @@ const Payment = () => {
 
     fetchOrderDetails();
   }, [orderId]);
+
+  const handlePayment = async () => {
+    try {
+      const response = await axios.post('http://localhost:7000/api/payment', {
+        amount: orderDetails.event.TotalPrice * 100,
+        orderId: orderId,
+        menuname: orderDetails.event.menuname,
+      });
+
+      const { data } = response;
+      console.log(data);
+      console.log(data.amount);
+
+      const options = {
+        key: data.key_id,
+        amount: data.amount,
+        currency: 'INR',
+        name: orderDetails.caterer.company,
+        description: 'Dummy Payment',
+        order_id: data.order_id,
+        handler: function (response) {
+          console.log('Payment successful:', response);
+          axios.post('http://localhost:7000/api/payment/success', {
+            order_id: orderId,
+            payment_id: response.razorpay_payment_id,
+            price:orderDetails.event.TotalPrice,
+          }).then((response) => {
+            console.log('Payment success data sent to server:', response.data);
+            // Optionally, you can perform further actions here after sending the payment success data to the server
+          }).catch((error) => {
+            console.error('Error sending payment success data to server:', error);
+          });
+        },
+        prefill: {
+          name: orderDetails.customer.name,
+          email: orderDetails.customer.email,
+          contact: orderDetails.customer.phone,
+        },
+      };
+
+      // console.log(options);
+
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      script.onload = () => {
+        const rzp = new window.Razorpay(options);
+        console.log("hi");
+        rzp.open();
+        console.log("bye");
+      };
+      console.log(script);
+      document.body.appendChild(script);
+
+    } catch (error) {
+      console.log(error);
+      console.error('Error initiating payment:', error);
+    }
+  };
 
   if (loading) {
     return <div>Loading...</div>;
@@ -148,8 +206,8 @@ const Payment = () => {
               </div>
             </div>
             <div style={{ marginBottom: "30px", marginLeft: "50px", marginTop: "50px", display: "flex", justifyContent: "center" }}>
-                <button style={styles.payButton} onClick={() => console.log("Payment clicked")}>Pay Here</button>
-            </div>
+            <button style={styles.payButton} onClick={handlePayment}>Pay Here</button>
+          </div>
           </div>
         </div>
       )}
@@ -158,16 +216,48 @@ const Payment = () => {
 };
 
 const styles = {
-    payButton: {
-      padding: "10px 20px",
-      fontSize: "16px",
-      cursor: "pointer",
-      backgroundColor: "#007bff",
-      color: "#fff",
-      border: "none",
-      borderRadius: "4px",
-      transition: "background-color 0.3s",
-    },
+  payButton: {
+    padding: "10px 20px",
+    fontSize: "16px",
+    cursor: "pointer",
+    backgroundColor: "#007bff",
+    color: "#fff",
+    border: "none",
+    borderRadius: "4px",
+    transition: "background-color 0.3s",
+  }
   };
 
 export default Payment;
+
+
+
+
+
+
+// import React, { useState, useEffect } from "react";
+//import { useLocation } from "react-router-dom";
+// import axios from "axios";
+
+// const Payment = () => {
+//   const location = useLocation();
+//   const { orderId } = location.state;
+//   const [orderDetails, setOrderDetails] = useState(null);
+//   const [loading, setLoading] = useState(true);
+//   const [error, setError] = useState(null);
+
+//   useEffect(() => {
+//     const fetchOrderDetails = async () => {
+//       try {
+//         const response = await axios.get(`http://localhost:7000/api/orders/${orderId}`);
+//         setOrderDetails(response.data);
+//         setLoading(false);
+//       } catch (error) {
+//         console.error("Error fetching order details:", error);
+//         setError("Failed to fetch order details. Please try again later.");
+//         setLoading(false);
+//       }
+//     };
+
+//     fetchOrderDetails();
+//   }, [orderId]);

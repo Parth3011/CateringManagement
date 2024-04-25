@@ -70,4 +70,23 @@
 }
 
 
+.error {
+    color: red;
+    font-size: 0.8rem;
+    margin-top: 0.2rem;
+  }
+  
+  /* Input field error style */
+  input.error,
+  textarea.error {
+    border: 1px solid red;
+  }
+  
+  /* Date and time input error style */
+  .date.error,
+  .time.error {
+    border: 1px solid red;
+    color: red;
+  }
+
 

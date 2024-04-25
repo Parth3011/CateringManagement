@@ -2,13 +2,27 @@
 const con = require("../../config/dbConnection");
 
 const getCustomerDetail = (req, res) => {
-    const query = 'SELECT * FROM customers';
-    // console.log(query);
-  con.query(query, (error, results) => {
-    if (error) throw error;
+  const query = `
+  SELECT 
+    customers.*, 
+    GROUP_CONCAT(orders.order_id) AS order_ids
+  FROM 
+    customers
+  LEFT JOIN 
+    orders ON customers.customer_id = orders.customer_id
+  GROUP BY 
+    customers.customer_id
+`;
+
+con.query(query, (error, results) => {
+  if (error) {
+    console.error('Error fetching caterer details:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  } else {
     res.json(results);
-  });
-}
+  }
+});
+};
 
 const deletecustomer = (req, res) => {
   const id = parseInt(req.params.id);

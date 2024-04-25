@@ -48,11 +48,11 @@ const signupcustomer = (req, resp) => {
         // `SELECT * FROM customers WHERE LOWER(email) = LOWER(${con.escape(
         //     req.body.email
         // )});`,
-        `SELECT * FROM customers WHERE LOWER(email) = LOWER(${con.escape(email)});`,
+        `SELECT * FROM customers WHERE LOWER(email) = LOWER(${con.escape(email)});`&&`SELECT * FROM login WHERE LOWER(email) = LOWER(${con.escape(email)});`,
 
         (err, result) => {
             if (result && result.length) {
-                return resp.status(409).send({
+                return resp.send({
                     msg: "This user is already in use!"
                 });
             }

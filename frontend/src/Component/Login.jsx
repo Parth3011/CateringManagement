@@ -56,6 +56,7 @@ export default function Login({ UserData }) {
             UserData(resp.data.user);
           })
           .catch((error) => {
+            console.log(error);
             console.error('Error submitting form:', error);
             alert("Email or password is incorrect");
           });

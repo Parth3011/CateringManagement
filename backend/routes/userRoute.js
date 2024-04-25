@@ -78,6 +78,11 @@ const { getcatererinfo, getmenusdetails } = require("../controllers/customer/Sec
 const { event } = require("../controllers/customer/ThirdPage");
 const { order } = require("../controllers/customer/Fourpage");
 const { orderdetails } = require("../controllers/customer/Fifthpage");
+const { acceptOrder, rejectOrder } = require("../controllers/Caterer/OrderStatus");
+const { StatusOrder } = require("../controllers/customer/StatusOrder");
+const { payment, paymentsuccess } = require("../controllers/customer/Paymentdummy");
+const { getPaymentStatus } = require("../controllers/Caterer/PaymentStatus");
+const { orderrequest } = require("../controllers/customer/OrderRequest");
 
 
 
@@ -128,6 +133,18 @@ router.put('/updatecatererprofile', profile.updateCatererDetailes)
   router.post('/order',order);
 
   router.get("/orders/:orderId",orderdetails);
+  router.get("/order/:orderId/status",StatusOrder);
+
+  // accept/reject
+  router.get('/orders',orderrequest);
+  router.post('/order/:orderId/accept', acceptOrder);
+  router.post('/order/:orderId/reject', rejectOrder);
+
+  //payment
+  router.post('/payment',payment);
+  router.post('/payment/success',paymentsuccess);
+
+  router.get('/order/:orderId/payment',getPaymentStatus);
 
 
 

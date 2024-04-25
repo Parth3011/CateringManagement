@@ -1,5 +1,5 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const CustomerHome = ({ user }) => {
@@ -10,6 +10,7 @@ const CustomerHome = ({ user }) => {
   const [filteredMenus, setFilteredMenus] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(""); // New state for selected event
   const [numberOfPeople, setNumberOfPeople] = useState(1); // New state for number of people
+  const [eventError, setEventError] = useState(false); // New state for event validation error
 
   const navigate = useNavigate();
 
@@ -88,6 +89,11 @@ const CustomerHome = ({ user }) => {
   };
 
   const handleView = (caterer_id) => {
+    if (!selectedEvent) {
+      // If no event is selected, set the eventError state to true
+      setEventError(true);
+      return;
+    }
     navigate(`/customer/cmenu/${caterer_id}`, {
       state: {
         selectedEvent,
@@ -162,7 +168,10 @@ const CustomerHome = ({ user }) => {
               <select
                 id="event"
                 value={selectedEvent}
-                onChange={(e) => setSelectedEvent(e.target.value)}
+                onChange={(e) => {
+                  setSelectedEvent(e.target.value);
+                  setEventError(false); // Reset eventError state when the event is selected
+                }}
                 style={{
                   marginLeft: "10px",
                   padding: "8px",
@@ -176,6 +185,11 @@ const CustomerHome = ({ user }) => {
                 <option value="corporate">Corporate</option>
                 {/* Add more options as needed */}
               </select>
+              {eventError && (
+                <p style={{ color: "red", margin: "5px 0 0", fontSize: "0.8em" }}>
+                  Please select an event.
+                </p>
+              )}
             </div>
 
             {/* Number of people input */}

@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import { useLocation , useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const Order = ({ user , onOrderPlaced }) => {
+// , onOrderPlaced
+
+const Order = ({ user  }) => {
   const location = useLocation();
   const bookingData = location.state;
 
@@ -10,49 +12,53 @@ const Order = ({ user , onOrderPlaced }) => {
   // console.log(bookingData);
   // Access customer details from user prop
   const { name, email, phone, address: userAddress, city: userCity, state: userState } = user;
-  const [orderStatus, setOrderStatus] = useState("pending");
+  // const [orderStatus, setOrderStatus] = useState("pending");
   // const [setOrderId] = useState(null);
 
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   //const handleOrder = async () => {
-  const handleOrder = async () => {
-    try {
-
-      // Send the order details to the backend
-      const response = await axios.post("http://localhost:7000/api/order", {
-        user,
-        bookingData
-      });
-      // console.log("Hi bro");
-      // Handle successful response from the backend
-
-      console.log("hiii");
-      if (response.status === 200) {
-        alert("Order placed successfully! Now you can proceed with the payment process.");
-        const orderId = response.data.order_id; // Extract order ID from the response
-
-        console.log(orderId);
-        onOrderPlaced(orderId);
-
-        setOrderStatus("pending");
-        if (orderStatus === "accepted") {
+    const handleOrder = async () => {
+      setIsLoading(true);
+      try {
+        // Send the order details to the backend
+        const response = await axios.post("http://localhost:7000/api/order", {
+          user,
+          bookingData
+        });
+    
+        if (response.status === 200) {
+          alert("Order placed successfully! Now you can proceed with the payment process.");
+          const orderId = response.data.order_id; // Extract order ID from the response
           
-          navigate(`/customer/payment`, { state: { orderId, user, bookingData } });
-        } else {
-          // Display message if the order is rejected
-          alert("Your order request has been rejected. Please check your email for details.");
+    
+          // Start checking for the order status periodically
+          const intervalId = setInterval(async () => {
+            try {
+              const statusResponse = await axios.get(`http://localhost:7000/api/order/${orderId}/status`);
+              const status = statusResponse.data.orderstatus;
+              const description = statusResponse.data.rejection_status;
 
-      // navigate(`/customer/payment`, { state: { orderId, user, bookingData } });
+              if (status === "accepted") {
+                clearInterval(intervalId); // Stop checking for status once accepted
+                navigate(`/customer/payment`, { state: { orderId, user, bookingData } });
+              } else if (status === "rejected") {
+                clearInterval(intervalId); // Stop checking for status once rejected
+                const errorMessage = `Sorry, your order request has been rejected.\n\n${description}`;
+                alert(errorMessage);              }
+            } catch (error) {
+              console.error("Error fetching order status:", error);
+            }
+          }, 5000); // Check status every 5 seconds
+        }
+      } catch (error) {
+        // Handle errors
+        console.error("Error placing order:", error);
+        alert("Failed to place order. Please try again later.");
       }
-    }
-    } catch (error) {
-      // Handle errors
-      console.error("Error placing order:", error);
-      alert("Failed to place order. Please try again later.");
-    }
-  };
-
+    };
+    
   return (
     <div style={{ margin: "70px", fontFamily: "Arial, sans-serif" , fontSize:"20px"}}>
       <h2 style={{ margin: "5px", fontFamily: "Arial, sans-serif" , fontSize:"40px"}}>Your Details</h2>
@@ -95,7 +101,7 @@ const Order = ({ user , onOrderPlaced }) => {
         </table>
       </div>
       <div style={{ display: "flex", justifyContent: "center" }}>
-        <button onClick={handleOrder} style={{ marginTop: "30px", padding: "10px 20px", fontSize: "20px", backgroundColor: "#007bff", color: "#fff", border: "none", borderRadius: "5px", cursor: "pointer" }}>Place Order</button>
+        <button onClick={handleOrder} style={{ marginTop: "30px", padding: "10px 20px", fontSize: "20px", backgroundColor: "#007bff", color: "#fff", border: "none", borderRadius: "5px", cursor: "pointer",opacity: isLoading ? 0.5 : 1,pointerEvents: isLoading ? "none" : "auto" }} disabled={isLoading}>{isLoading ? "Placing Order..." : "Place Order"}</button>
       </div>
     </div>
   );

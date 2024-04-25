@@ -109,12 +109,13 @@ const Menus = ({user}) => {
                 <td>{data.description}</td>
                 <td>{data.status}</td>
                 <td>
-                  <button
+                <button
                     style={{
                       border: "2px solid black",
                       width: "100px",
                       backgroundColor: "red",
-                      marginLeft:"20px"
+                      color: "white",
+                      marginLeft: "20px",
                     }}
                     onClick={() => handleDelete(data.id)}
                   >
@@ -126,11 +127,13 @@ const Menus = ({user}) => {
                       border: "2px solid black",
                       width: "100px",
                       backgroundColor: "blue",
+                      color: "white",
                     }}
                     onClick={() => handleUpdate(data.id)}
                   >
                     Update
                   </button>
+
                 </td>
               </tr>
             ))}

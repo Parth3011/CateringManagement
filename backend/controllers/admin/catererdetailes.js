@@ -2,13 +2,31 @@
 const con = require("../../config/dbConnection");
 
 const getCatererDetail = (req, res) => {
-  const query = 'SELECT * FROM caterers';
-  // console.log(query);
+  const query = `
+    SELECT 
+      caterers.*, 
+      GROUP_CONCAT(orders.order_id) AS order_ids
+    FROM 
+      caterers
+    LEFT JOIN 
+      orders ON caterers.caterer_id = orders.caterer_id
+    GROUP BY 
+      caterers.caterer_id
+  `;
+
   con.query(query, (error, results) => {
-    if (error) throw error;
-    res.json(results);
+    if (error) {
+      console.error('Error fetching caterer details:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    } else {
+      res.json(results);
+    }
   });
-}
+};
+
+
+
+
 
 const deletecaterer = (req, res) => {
   const id = parseInt(req.params.id);
