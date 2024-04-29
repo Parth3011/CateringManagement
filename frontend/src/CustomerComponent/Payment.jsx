@@ -8,6 +8,7 @@ const Payment = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { orderId } = location.state;
+  //const [paymentSuccess, setPaymentSuccess] = useState(false);
 
   useEffect(() => {
     const fetchOrderDetails = async () => {
@@ -52,7 +53,6 @@ const Payment = () => {
             price:orderDetails.event.TotalPrice,
           }).then((response) => {
             console.log('Payment success data sent to server:', response.data);
-            // Optionally, you can perform further actions here after sending the payment success data to the server
           }).catch((error) => {
             console.error('Error sending payment success data to server:', error);
           });
@@ -101,7 +101,7 @@ const Payment = () => {
 
   return (
     <div style={{ margin: "20px" }}>
-      <h1 style={{ fontSize: "24px", marginBottom: "20px" }}>Payment</h1>
+      <h1 style={{ fontSize: "50px", marginBottom: "20px", textDecoration:"underline" }}>Payment</h1>
       {orderDetails && (
         <div style={{ marginBottom: "20px" }}>
           <div style={{ marginBottom: "20px" }}>
@@ -231,33 +231,3 @@ const styles = {
 export default Payment;
 
 
-
-
-
-
-// import React, { useState, useEffect } from "react";
-//import { useLocation } from "react-router-dom";
-// import axios from "axios";
-
-// const Payment = () => {
-//   const location = useLocation();
-//   const { orderId } = location.state;
-//   const [orderDetails, setOrderDetails] = useState(null);
-//   const [loading, setLoading] = useState(true);
-//   const [error, setError] = useState(null);
-
-//   useEffect(() => {
-//     const fetchOrderDetails = async () => {
-//       try {
-//         const response = await axios.get(`http://localhost:7000/api/orders/${orderId}`);
-//         setOrderDetails(response.data);
-//         setLoading(false);
-//       } catch (error) {
-//         console.error("Error fetching order details:", error);
-//         setError("Failed to fetch order details. Please try again later.");
-//         setLoading(false);
-//       }
-//     };
-
-//     fetchOrderDetails();
-//   }, [orderId]);

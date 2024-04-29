@@ -1,29 +1,31 @@
 import React, { useState } from 'react';
-import '../Css/signup.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-export default function Signup({ datauser }) {
-
-  const data = { name: "", email: "", pwd: "", confirm: "", phone: "", address: "", pincode: "", city: "", state: "" };
+export default function SignupAdmin({ datauser }) {
+  const data = {
+    name: "",
+    email: "",
+    pwd: "",
+    confirm: "",
+    phone: "",
+    address: "",
+    pincode: "",
+    city: "",
+    state: "",
+  };
   const [inputdata, setinputData] = useState(data);
   const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
 
   const handleData = (e) => {
     setinputData({ ...inputdata, [e.target.name]: e.target.value });
-    // Clear previous errors
     setErrors({ ...errors, [e.target.name]: '' });
   }
 
-  const navigate = useNavigate();
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    const validationErrors = validate(inputdata);
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
+    if (validateForm()) {
     try {
       axios.post('http://localhost:7000/api/signupadmin', inputdata)
         .then((resp) => {
@@ -32,9 +34,9 @@ export default function Signup({ datauser }) {
             navigate("/admin");
             datauser(resp.data.user);
             console.log("resp", resp);
-          }else if (resp.data.msg === "This user is already in use!") {
+          } else if (resp.data.msg === "This user is already in use!") {
             alert("Email already exists. Please use a different email address.");
-          }else {
+          } else {
             console.log("hi here");
             alert("Registration is invalid");
           }
@@ -44,94 +46,136 @@ export default function Signup({ datauser }) {
       console.error('Error submitting form:', e);
       alert('An error occurred while submitting the form');
     }
+  }
   };
 
-  const validate = (data) => {
-    const errors = {};
-    if (!data.name) {
-      errors.name = 'Username is required';
+  const validateForm = () => {
+    let errors = {};
+    let formIsValid = true;
+
+    if (!inputdata.name) {
+      formIsValid = false;
+      errors.name = "Please enter your username.";
     }
-    if (!data.email) {
-      errors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(data.email)) {
-      errors.email = 'Email is invalid';
+
+    if (!inputdata.email) {
+      formIsValid = false;
+      errors.email = "Please enter your email address.";
+    } else {
+      let pattern = new RegExp(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
+      if (!pattern.test(inputdata.email)) {
+        formIsValid = false;
+        errors.email = "Please enter a valid email address.";
+      }
     }
-    if (!data.pwd) {
-      errors.pwd = 'Password is required';
-    } else if (data.pwd.length < 5) {
-      errors.pwd = 'Password should be at least 5 characters long';
+
+    if (!inputdata.pwd) {
+      formIsValid = false;
+      errors.pwd = "Please enter your password.";
+    } else if (inputdata.pwd.length < 5) {
+      formIsValid = false;
+      errors.pwd = "Password must be at least 5 characters long.";
     }
-    if (!data.confirm) {
-      errors.confirm = 'Confirm password is required';
-    } else if (data.confirm !== data.pwd) {
-      errors.confirm = 'Passwords do not match';
+
+    if (!inputdata.confirm) {
+      formIsValid = false;
+      errors.confirm = "Please confirm your password.";
+    } else if (inputdata.pwd !== inputdata.confirm) {
+      formIsValid = false;
+      errors.confirm = "Passwords do not match.";
     }
-    if (!data.phone) {
-      errors.phone = 'Phone number is required';
-    } else if (!/^\d{10}$/.test(data.phone)) {
-      errors.phone = 'Phone number should contain exactly 10 digits';
+
+    setErrors(errors);
+    return formIsValid;
+  }
+
+
+  const validate = () => {
+    let formIsValid = true;
+    let newErrors = {};
+
+
+    // Password validation
+    if (!inputdata.pwd) {
+      newErrors.pwd = "Please enter your password.";
+      formIsValid = false;
+    } else if (inputdata.pwd.length < 5) {
+      newErrors.pwd = "Password must be at least 5 characters long.";
+      formIsValid = false;
     }
-    if (!data.address) {
-      errors.address = 'Address is required';
+
+    // Confirm password validation
+    if (!inputdata.confirm) {
+      newErrors.confirm = "Please confirm your password.";
+      formIsValid = false;
+    } else if (inputdata.pwd !== inputdata.confirm) {
+      newErrors.confirm = "Passwords do not match.";
+      formIsValid = false;
     }
-    if (!data.pincode) {
-      errors.pincode = 'Pincode is required';
-    } else if (!/^\d{6}$/.test(data.pincode)) {
-      errors.pincode = 'Pincode should contain exactly 6 digits';
-    }
-    if (!data.city) {
-      errors.city = 'City is required';
-    }
-    if (!data.state) {
-      errors.state = 'State is required';
-    }
-    return errors;
+
+    setErrors(newErrors);
+    return formIsValid;
   };
-  
+
 
   return (
-    <div className='registration'>
-      <h1>Registration Admin</h1>
-      <div className='box'>
-        <label>Username</label>
-        <input type="text" className='uname' name="name" value={inputdata.name} onChange={handleData} />
-        <span className='error'>{errors.name}</span><br />
+    <div style={{
+      height: '150vh',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      background: 'linear-gradient(to bottom right, #c3d1e4, #e5e7eb)',
+    }}>
+      <div style={{
+        backgroundColor: 'rgba(255, 255, 255, 0.8)',
+        padding: '20px',
+        borderRadius: '10px',
+        boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
+        // width: '80%',
+        // maxWidth: '400px', // Max width for responsiveness
+        width:"800px"
+    }}>
+        <h1 style={{ marginBottom: '20px' ,fontSize:"50px"}}>Registration Admin</h1>
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
+          <label style={{ marginBottom: '5px' }}>Username</label>
+          <input type="text" style={{ marginBottom: '10px', padding: '8px', borderRadius: '5px', border: '1px solid #ccc' }} name="name" value={inputdata.name} onChange={handleData} />
+          <span style={{ color: 'red', marginBottom: '10px' }}>{errors.name}</span>
 
-        <label>Email</label>
-        <input type="email" className='email' name="email" value={inputdata.email} onChange={handleData} />
-        <span className='error'>{errors.email}</span><br />
+          <label style={{ marginBottom: '5px' }}>Email</label>
+          <input type="email" style={{ marginBottom: '10px', padding: '8px', borderRadius: '5px', border: '1px solid #ccc' }} name="email" value={inputdata.email} onChange={handleData} />
+          <span style={{ color: 'red', marginBottom: '10px' }}>{errors.email}</span>
 
-        <label>Password</label>
-        <input type="password" className='pwd' name="pwd" value={inputdata.pwd} onChange={handleData} />
-        <span className='error'>{errors.pwd}</span><br />
+          <label style={{ marginBottom: '5px' }}>Password</label>
+          <input type="password" style={{ marginBottom: '10px', padding: '8px', borderRadius: '5px', border: '1px solid #ccc' }} name="pwd" value={inputdata.pwd} onChange={handleData} />
+          <span style={{ color: 'red', marginBottom: '10px' }}>{errors.pwd}</span>
 
-        <label>Confirm Password</label>
-        <input type="password" className='confirm' name="confirm" value={inputdata.confirm} onChange={handleData} />
-        <span className='error'>{errors.confirm}</span><br />
+          <label style={{ marginBottom: '5px' }}>Confirm Password</label>
+          <input type="password" style={{ marginBottom: '10px', padding: '8px', borderRadius: '5px', border: '1px solid #ccc' }} name="confirm" value={inputdata.confirm} onChange={handleData} onBlur={validate}/>
+          <span style={{ color: 'red', marginBottom: '10px' }}>{errors.confirm}</span>
 
-        <label>Phone No.</label>
-        <input type="number" className='phone' name="phone" value={inputdata.phone} onChange={handleData} />
-        <span className='error'>{errors.phone}</span><br />
+          <label style={{ marginBottom: '5px' }}>Phone No.</label>
+          <input type="number" style={{ marginBottom: '10px', padding: '8px', borderRadius: '5px', border: '1px solid #ccc' }} name="phone" value={inputdata.phone} onChange={handleData} />
+          <span style={{ color: 'red', marginBottom: '10px' }}>{errors.phone}</span>
 
-        <label>Address</label>
-        <textarea className='address' rows="1" name="address" value={inputdata.address} onChange={handleData}></textarea>
-        <span className='error'>{errors.address}</span><br />
+          <label style={{ marginBottom: '5px' }}>Address</label>
+          <textarea style={{ marginBottom: '10px', padding: '8px', borderRadius: '5px', border: '1px solid #ccc' }} rows="1" name="address" value={inputdata.address} onChange={handleData}></textarea>
+          <span style={{ color: 'red', marginBottom: '10px' }}>{errors.address}</span>
 
-        <label>Pincode</label>
-        <input type="number" className='pin' name="pincode" value={inputdata.pincode} onChange={handleData} />
-        <span className='error'>{errors.pincode}</span><br />
+          <label style={{ marginBottom: '5px' }}>Pincode</label>
+          <input type="number" style={{ marginBottom: '10px', padding: '8px', borderRadius: '5px', border: '1px solid #ccc' }} name="pincode" value={inputdata.pincode} onChange={handleData} />
+          <span style={{ color: 'red', marginBottom: '10px' }}>{errors.pincode}</span>
 
-        <label>City</label>
-        <input type="text" className='city' name="city" value={inputdata.city} onChange={handleData} />
-        <span className='error'>{errors.city}</span><br />
+          <label style={{ marginBottom: '5px' }}>City</label>
+          <input type="text" style={{ marginBottom: '10px', padding: '8px', borderRadius: '5px', border: '1px solid #ccc' }} name="city" value={inputdata.city} onChange={handleData} />
+          <span style={{ color: 'red', marginBottom: '10px' }}>{errors.city}</span>
 
-        <label>State</label>
-        <input type="text" className='state' name="state" value={inputdata.state} onChange={handleData} />
-        <span className='error'>{errors.state}</span><br />
+          <label style={{ marginBottom: '5px' }}>State</label>
+          <input type="text" style={{ marginBottom: '10px', padding: '8px', borderRadius: '5px', border: '1px solid #ccc' }} name="state" value={inputdata.state} onChange={handleData} />
+          <span style={{ color: 'red', marginBottom: '10px' }}>{errors.state}</span>
 
-        <input type="submit" className="register bg-success" value="Submit" onClick={handleSubmit} />
-
+          <input type="submit" style={{ padding: '10px', borderRadius: '5px', backgroundColor: '#28a745', color: '#fff', cursor: 'pointer', border: 'none' }} value="Submit" onClick={handleSubmit} />
+        </div>
       </div>
     </div>
-  )
+  );
 }

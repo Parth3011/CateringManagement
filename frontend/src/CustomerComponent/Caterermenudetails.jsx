@@ -14,7 +14,6 @@ const Caterermenudetails = () => {
   console.log(selectedEvent);
   console.log(numberOfPeople);
 
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -98,11 +97,13 @@ const Caterermenudetails = () => {
       <h3
         style={{
           marginTop: "33px",
-          fontSize: "1.2em",
+         // fontSize: "1.2em",
           fontWeight: "bold",
+          fontSize:"50px",
+          textDecoration:"underline",
         }}
       >
-        Menus
+        Menu
       </h3>
       <div>
         {menus.map((menu, index) => (
@@ -138,13 +139,19 @@ const Caterermenudetails = () => {
                 <button
                   onClick={() => addToCart(index)}
                   style={{
-                    background: "green",
-                    padding: "5px",
+                    background: menu.selected ? "red" : "green",
+                    padding: "10px 20px",
+                    borderRadius: "5px",
                     border: "2px solid black",
-                    marginTop: "5px",
+                    color: "white",
+                    cursor: "pointer",
+                    transition: "background 0.3s",
+                    width: "120px", // Fixed width
+                    textAlign: "center", // Center text horizontally
+                    margin: "5px", // Add some margin for spacing
                   }}
                 >
-                  {menu.selected ? "Remove from Cart" : "Add to Cart"}
+                  {menu.selected ? "Remove" : "Add"}
                 </button>
               </div>
             </div>
@@ -165,8 +172,9 @@ const Caterermenudetails = () => {
           marginBottom: "50px",
         }}
       >
-        Go to Cart
+        Add to Cart
       </button>
+
     </div>
   );
 };

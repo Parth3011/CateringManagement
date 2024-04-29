@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import "../Css/signup.css";
 import axios from "axios";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
-export default function SignupCustomer({datauser}) {
+export default function SignupCustomer({ datauser }) {
   const data = {
     name: "",
     email: "",
@@ -27,13 +26,16 @@ export default function SignupCustomer({datauser}) {
     e.preventDefault();
     if (validateForm()) {
       try {
-        const resp = await axios.post("http://localhost:7000/api/signupcustomer", inputdata);
+        const resp = await axios.post(
+          "http://localhost:7000/api/signupcustomer",
+          inputdata
+        );
         alert("Registration Successful");
         if (resp.data.Status === "Success") {
           navigate("/customer");
           datauser(resp.data.user);
         } else if (resp.data.msg === "This user is already in use!") {
-            alert("Email already exists. Please use a different email address.");
+          alert("Email already exists. Please use a different email address.");
         } else {
           alert("Registration is invalid");
         }
@@ -45,191 +47,281 @@ export default function SignupCustomer({datauser}) {
   };
 
   const validateForm = () => {
-    let errors = {};
     let formIsValid = true;
+    let newErrors = {};
 
+    // Username validation
     if (!inputdata.name) {
+      newErrors.name = "Please enter your username.";
       formIsValid = false;
-      errors.name = "Please enter your username.";
     }
 
+    // Email validation
     if (!inputdata.email) {
+      newErrors.email = "Please enter your email address.";
       formIsValid = false;
-      errors.email = "Please enter your email address.";
     } else {
       let pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!pattern.test(inputdata.email)) {
+        newErrors.email = "Please enter a valid email address.";
         formIsValid = false;
-        errors.email = "Please enter a valid email address.";
       }
     }
 
+    // Password validation
     if (!inputdata.pwd) {
+      newErrors.pwd = "Please enter your password.";
       formIsValid = false;
-      errors.pwd = "Please enter your password.";
     } else if (inputdata.pwd.length < 5) {
+      newErrors.pwd = "Password must be at least 5 characters long.";
       formIsValid = false;
-      errors.pwd = "Password must be at least 5 characters long.";
     }
 
+    // Confirm password validation
     if (!inputdata.confirm) {
+      newErrors.confirm = "Please confirm your password.";
       formIsValid = false;
-      errors.confirm = "Please confirm your password.";
     } else if (inputdata.pwd !== inputdata.confirm) {
+      newErrors.confirm = "Passwords do not match.";
       formIsValid = false;
-      errors.confirm = "Passwords do not match.";
     }
 
+    // Phone validation
     if (!inputdata.phone) {
+      newErrors.phone = "Please enter your phone number.";
       formIsValid = false;
-      errors.phone = "Please enter your phone number.";
     } else {
       let pattern = /^\d{10}$/;
       if (!pattern.test(inputdata.phone)) {
+        newErrors.phone = "Please enter a valid phone number.";
         formIsValid = false;
-        errors.phone = "Please enter a valid phone number.";
       }
     }
 
+    // Address validation
     if (!inputdata.address) {
+      newErrors.address = "Please enter your address.";
       formIsValid = false;
-      errors.address = "Please enter your address.";
     }
 
+    // Pincode validation
     if (!inputdata.pincode) {
+      newErrors.pincode = "Please enter your pincode.";
       formIsValid = false;
-      errors.pincode = "Please enter your pincode.";
     } else {
       let pattern = /^\d{6}$/;
       if (!pattern.test(inputdata.pincode)) {
+        newErrors.pincode = "Please enter a valid pincode.";
         formIsValid = false;
-        errors.pincode = "Please enter a valid pincode.";
       }
     }
 
+    // City validation
     if (!inputdata.city) {
+      newErrors.city = "Please enter your city.";
       formIsValid = false;
-      errors.city = "Please enter your city.";
     }
 
+    // State validation
     if (!inputdata.state) {
+      newErrors.state = "Please enter your state.";
       formIsValid = false;
-      errors.state = "Please enter your state.";
     }
 
-    setErrors(errors);
+    setErrors(newErrors);
+    return formIsValid;
+  };
+
+
+  
+  const validate = () => {
+    let formIsValid = true;
+    let newErrors = {};
+
+    // Email validation
+    if (!inputdata.email) {
+      newErrors.email = "Please enter your email address.";
+      formIsValid = false;
+    } else {
+      let pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!pattern.test(inputdata.email)) {
+        newErrors.email = "Please enter a valid email address.";
+        formIsValid = false;
+      }
+    }
+
+    // Password validation
+    if (!inputdata.pwd) {
+      newErrors.pwd = "Please enter your password.";
+      formIsValid = false;
+    } else if (inputdata.pwd.length < 5) {
+      newErrors.pwd = "Password must be at least 5 characters long.";
+      formIsValid = false;
+    }
+
+    // Confirm password validation
+    if (!inputdata.confirm) {
+      newErrors.confirm = "Please confirm your password.";
+      formIsValid = false;
+    } else if (inputdata.pwd !== inputdata.confirm) {
+      newErrors.confirm = "Passwords do not match.";
+      formIsValid = false;
+    }
+
+    setErrors(newErrors);
     return formIsValid;
   };
 
   return (
-    <div className="registration">
-      <h1>Registration Customer</h1>
-      <div className="box">
-        <label>Username</label>
-        <input
-          type="text"
-          className="uname"
-          name="name"
-          value={inputdata.name}
-          onChange={handledata}
-        />
-        <span className="error" style={{ color: 'red' }}>{errors.name}</span>
-        <br />
+    <div
+      style={{
+        height: "150vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        background:
+          "linear-gradient(to bottom right, #c3d1e4, #e5e7eb)",
+      }}
+    >
+      <div
+        style={{
+          backgroundColor: "rgba(255, 255, 255, 0.8)",
+          padding: "20px",
+          borderRadius: "10px",
+          boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
+          // width: "80%",
+          // maxWidth: "400px", // Max width for responsiveness
+          width: "800px"
+        }}
+      >
+        <h1 style={{ marginBottom: "20px" ,fontSize:"50px"}}>
+          Registration Customer
+        </h1>
+        <form style={{ display: "flex", flexDirection: "column" }}>
+          <label style={{ marginBottom: "5px" }}>Username</label>
+          <input
+            type="text"
+            name="name"
+            value={inputdata.name}
+            onChange={handledata}
+            style={{  marginBottom: '10px', padding: '8px', borderRadius: '5px', border: '1px solid #ccc' }}
+          />
+          <span className="error" style={{ color: "red" }}>
+            {errors.name}
+          </span>
 
-        <label>Email</label>
-        <input
-          type="text"
-          className="email"
-          name="email"
-          value={inputdata.email}
-          onChange={handledata}
-        />
-        <span className="error" style={{ color: 'red' }}>{errors.email}</span>
-        <br />
+          <label style={{ marginBottom: "5px" }}>Email</label>
+          <input
+            type="text"
+            name="email"
+            value={inputdata.email}
+            onChange={handledata}
+            onBlur={validate}
+            style={{ marginBottom: '10px', padding: '8px', borderRadius: '5px', border: '1px solid #ccc' }}
+          />
+          <span className="error" style={{ color: "red" }}>
+            {errors.email}
+          </span>
 
-        <label>Password</label>
-        <input
-          type="password"
-          className="pwd"
-          name="pwd"
-          value={inputdata.pwd}
-          onChange={handledata}
-        />
-        <span className="error" style={{ color: 'red' }}>{errors.pwd}</span>
-        <br />
+          <label style={{ marginBottom: "5px" }}>Password</label>
+          <input
+            type="password"
+            name="pwd"
+            value={inputdata.pwd}
+            onChange={handledata}
+            style={{ marginBottom: '10px', padding: '8px', borderRadius: '5px', border: '1px solid #ccc' }}
+          />
+          <span className="error" style={{ color: "red" }}>
+            {errors.pwd}
+          </span>
 
-        <label>Confirm Password</label>
-        <input
-          type="password"
-          className="confirm"
-          name="confirm"
-          value={inputdata.confirm}
-          onChange={handledata}
-        />
-        <span className="error" style={{ color: 'red' }}>{errors.confirm}</span>
-        <br />
+          <label style={{ marginBottom: "5px" }}>Confirm Password</label>
+          <input
+            type="password"
+            name="confirm"
+            value={inputdata.confirm}
+            onChange={handledata}
+            onBlur={validate}
+            style={{ marginBottom: '10px', padding: '8px', borderRadius: '5px', border: '1px solid #ccc' }}
+          />
+          <span className="error" style={{ color: "red" }}>
+            {errors.confirm}
+          </span>
 
-        <label>Phone No.</label>
-        <input
-          type="text"
-          className="phone"
-          name="phone"
-          value={inputdata.phone}
-          onChange={handledata}
-        />
-        <span className="error" style={{ color: 'red' }}>{errors.phone}</span>
-        <br />
+          <label style={{ marginBottom: "5px" }}>Phone No.</label>
+          <input
+            type="text"
+            name="phone"
+            value={inputdata.phone}
+            onChange={handledata}
+            style={{ marginBottom: '10px', padding: '8px', borderRadius: '5px', border: '1px solid #ccc' }}
+          />
+          <span className="error" style={{ color: "red" }}>
+            {errors.phone}
+          </span>
 
-        <label>Address</label>
-        <textarea
-          className="address"
-          rows="1"
-          name="address"
-          value={inputdata.address}
-          onChange={handledata}
-        ></textarea>
-        <span className="error" style={{ color: 'red' }}>{errors.address}</span>
-        <br />
+          <label style={{ marginBottom: "5px" }}>Address</label>
+          <textarea
+            rows="1"
+            name="address"
+            value={inputdata.address}
+            onChange={handledata}
+            style={{ marginBottom: '10px', padding: '8px', borderRadius: '5px', border: '1px solid #ccc' }}
+          ></textarea>
+          <span className="error" style={{ color: "red" }}>
+            {errors.address}
+          </span>
 
-        <label>Pincode</label>
-        <input
-          type="text"
-          className="pin"
-          name="pincode"
-          value={inputdata.pincode}
-          onChange={handledata}
-        />
-        <span className="error" style={{ color: 'red' }}>{errors.pincode}</span>
-        <br />
+          <label style={{ marginBottom: "5px" }}>Pincode</label>
+          <input
+            type="text"
+            name="pincode"
+            value={inputdata.pincode}
+            onChange={handledata}
+            style={{ marginBottom: '10px', padding: '8px', borderRadius: '5px', border: '1px solid #ccc' }}
+          />
+          <span className="error" style={{ color: "red" }}>
+            {errors.pincode}
+          </span>
 
-        <label>City</label>
-        <input
-          type="text"
-          className="city"
-          name="city"
-          value={inputdata.city}
-          onChange={handledata}
-        />
-        <span className="error" style={{ color: 'red' }}>{errors.city}</span>
-        <br />
+          <label style={{ marginBottom: "5px" }}>City</label>
+          <input
+            type="text"
+            name="city"
+            value={inputdata.city}
+            onChange={handledata}
+            style={{ marginBottom: '10px', padding: '8px', borderRadius: '5px', border: '1px solid #ccc' }}
+          />
+          <span className="error" style={{ color: "red" }}>
+            {errors.city}
+          </span>
 
-        <label>State</label>
-        <input
-          type="text"
-          className="state"
-          name="state"
-          value={inputdata.state}
-          onChange={handledata}
-        />
-        <span className="error" style={{ color: 'red' }}>{errors.state}</span>
-        <br />
+          <label style={{ marginBottom: "5px" }}>State</label>
+          <input
+            type="text"
+            name="state"
+            value={inputdata.state}
+            onChange={handledata}
+            style={{ marginBottom: '10px', padding: '8px', borderRadius: '5px', border: '1px solid #ccc' }}
+          />
+          <span className="error" style={{ color: "red" }}>
+            {errors.state}
+          </span>
 
-        <input
-          type="submit"
-          className="register bg-success"
-          value="Submit"
-          onClick={handleSubmit}
-        />
+          <input
+            type="submit"
+            value="Register Now"
+            onClick={handleSubmit}
+            style={{
+              padding: "10px",
+              backgroundColor: "#007bff",
+              color: "white",
+              border: "none",
+              borderRadius: "5px",
+              cursor: "pointer",
+            }}
+          />
+        </form>
       </div>
     </div>
   );

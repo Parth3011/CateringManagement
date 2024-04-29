@@ -1,26 +1,36 @@
-
-.container
-{
-    background-image: url("https://img.freepik.com/free-vector/white-abstract-background-design_23-2148825582.jpg");
-     position:relative;
-    /*display : flex; */
-    height : 610px;
-    width : 100%;
-    border : 1px solid black;
-    margin-top: 2px;
-    /* margin : auto; */
-    /* top:70px; */
-    /* margin-top : 10px; */
-    /* margin-right: 550px;  */
+.container {
+    position: relative;
+    height: 83vh; /* Set the height to full viewport height */
+    width: 100%;
+    border: 1px solid black;
     background-color: whitesmoke;
+    background-image: url("https://img.freepik.com/free-vector/white-abstract-background-design_23-2148825582.jpg");
+    background-size: cover; /* Ensure the background image covers the entire container */
+    background-position: center; /* Center the background image */
+}
+
+@media (max-width: 768px) {
+    /* Adjust background image properties for smaller screens */
+    .container {
+        height: auto; /* Allow the container to adjust its height based on content */
+        background-size: contain; /* Change background image size to contain */
+        background-position: top; /* Adjust background image position */
+    }
+}
+
+.img {
+    width: 100%; /* Make the image responsive */
+    max-width: 100%; /* Limit the maximum width */
+    height: 650px; /* Set a fixed height */
+}
+
+@media (max-width: 768px) {
+    .img {
+        height: auto; /* Allow the height to adjust based on the width */
+    }
 }
 
 
-.img{
-
-    width: 400px;
-    height: 610px;
-}
 
 .logo {
     width: 40px;

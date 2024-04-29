@@ -33,17 +33,11 @@ import Order from "../CustomerComponent/Order";
 import Payment from "../CustomerComponent/Payment";
 import Orderdetail from "../CatererComponent/Orderdetail";
 import CatererPayment from "../CatererComponent/CatererPayment";
+import Orderhistory from "../CustomerComponent/Orderhistory";
 // import LogoutOutlet from "../Component/Logout";
 
 
 export default function Home() {
-  // const [orderId, setOrderId] = useState(localStorage.getItem("orderId"));
-
-  // const handleOrderPlaced = (orderId) => {
-  //   setOrderId(orderId);
-  //   localStorage.setItem("orderId", orderId);
-  // };
-
 
   const [user, setuser] = useState(() => {
     // Retrieve user from localStorage
@@ -122,6 +116,7 @@ export default function Home() {
             <Route path="cart" element={<CartPage />} />
             <Route path="checkout" element={<Checkout />} />
             <Route path="order" element={<Order user={user}/>} />
+            <Route path="orderhistory" element={<Orderhistory/>}  />
             {/*  <Route path="order" element={<Order user={user} onOrderPlaced={handleOrderPlaced}/>} /> */}
             <Route path="payment" element={<Payment/>} />
             <Route path="profile" element={<CustomerProfile user={user} onUpdateProfile={onUpdateProfile} />} />

@@ -1,18 +1,16 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import "../Css/checkout.css";
 import axios from "axios";
 
 export default function Checkout() {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
 
-
   const items = JSON.parse(decodeURIComponent(queryParams.get("items")));
   const totalPrice = parseFloat(queryParams.get("totalPrice"));
   const numberOfPeople = parseInt(queryParams.get("numberOfPeople"));
   const event = queryParams.get("event");
-  const catererId = queryParams.get("caterer_id"); 
+  const catererId = queryParams.get("caterer_id");
 
   const [time, setTime] = useState("");
   const [date, setDate] = useState("");
@@ -30,8 +28,8 @@ export default function Checkout() {
     if (!time) errors.time = "Please select a time";
     if (!date) errors.date = "Please select a date";
     if (!address) errors.address = "Please enter your address";
-    if (!city) errors.city = "Please enter your city";
-    if (!state) errors.state = "Please enter your state";
+    if (!city) errors.city = "Please select your city";
+    if (!state) errors.state = "Please select your state";
 
     if (Object.keys(errors).length === 0) {
       const confirmation = window.confirm(
@@ -43,7 +41,7 @@ export default function Checkout() {
 
         const bookingData = {
           items: foodNamesString,
-          menu_id: menuIdsString, 
+          menu_id: menuIdsString,
           totalPrice,
           numberOfPeople,
           event,
@@ -75,8 +73,26 @@ export default function Checkout() {
   };
 
   return (
-    <div className="registration">
-      <div className="square">
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+        background: "#f0f0f0",
+      }}
+    >
+      <div
+        className="square"
+        style={{
+          width: "80%",
+          maxWidth: "600px",
+          background: "#fff",
+          padding: "20px",
+          borderRadius: "10px",
+          boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
+        }}
+      >
         <label>Date</label>
         <input
           type="date"
@@ -87,8 +103,17 @@ export default function Checkout() {
           onChange={(e) => {
             setDate(e.target.value);
           }}
+          style={{
+            marginBottom: "10px",
+            padding: "8px",
+            borderRadius: "5px",
+            border: "1px solid #ccc",
+            width: "100%",
+          }}
         />
-        <span className="error">{errors.date}</span>
+        <span className="error" style={{ color: "red", fontSize: "14px" }}>
+          {errors.date}
+        </span>
         <br />
 
         <label>Time</label>
@@ -100,8 +125,17 @@ export default function Checkout() {
           onChange={(e) => {
             setTime(e.target.value);
           }}
+          style={{
+            marginBottom: "10px",
+            padding: "8px",
+            borderRadius: "5px",
+            border: "1px solid #ccc",
+            width: "100%",
+          }}
         />
-        <span className="error">{errors.time}</span>
+        <span className="error" style={{ color: "red", fontSize: "14px" }}>
+          {errors.time}
+        </span>
         <br />
 
         <label>Address</label>
@@ -113,34 +147,73 @@ export default function Checkout() {
           onChange={(e) => {
             setAddress(e.target.value);
           }}
+          style={{
+            marginBottom: "10px",
+            padding: "8px",
+            borderRadius: "5px",
+            border: "1px solid #ccc",
+            width: "100%",
+          }}
         ></textarea>
-        <span className="error">{errors.address}</span>
+        <span className="error" style={{ color: "red", fontSize: "14px" }}>
+          {errors.address}
+        </span>
         <br />
 
         <label>City</label>
-        <input
-          type="text"
+        <select
           className={errors.city ? "city error" : "city"}
           name="city"
           value={city}
           onChange={(e) => {
             setCity(e.target.value);
           }}
-        />
-        <span className="error">{errors.city}</span>
+          style={{
+            marginBottom: "10px",
+            padding: "8px",
+            borderRadius: "5px",
+            border: "1px solid #ccc",
+            width: "100%",
+          }}
+        >
+          <option value="">Select City</option>
+          <option value="Ahmedabad">Ahmedabad</option>
+          <option value="Mumbai">Mumbai</option>
+          <option value="Kolkata">Kolkata</option>
+          <option value="Chennai">Chennai</option>
+          <option value="Bangalore">Bangalore</option>
+        </select>
+        <span className="error" style={{ color: "red", fontSize: "14px" }}>
+          {errors.city}
+        </span>
         <br />
 
         <label>State</label>
-        <textarea
+        <select
           className={errors.state ? "state error" : "state"}
-          rows="1"
           name="state"
           value={state}
           onChange={(e) => {
             setState(e.target.value);
           }}
-        ></textarea>
-        <span className="error">{errors.state}</span>
+          style={{
+            marginBottom: "10px",
+            padding: "8px",
+            borderRadius: "5px",
+            border: "1px solid #ccc",
+            width: "100%",
+          }}
+        >
+          <option value="">Select State</option>
+          <option value="Gujarat">Gujarat</option>
+          <option value="Maharashtra">Maharashtra</option>
+          <option value="West Bengal">West Bengal</option>
+          <option value="Tamil Nadu">Tamil Nadu</option>
+          <option value="Karnataka">Karnataka</option>
+        </select>
+        <span className="error" style={{ color: "red", fontSize: "14px" }}>
+          {errors.state}
+        </span>
         <br />
 
         <input
@@ -148,6 +221,16 @@ export default function Checkout() {
           className="book bg-success"
           value="Book"
           onClick={handleSubmit}
+          style={{
+            marginTop: "20px",
+            padding: "10px",
+            borderRadius: "5px",
+            backgroundColor: "#28a745",
+            color: "#fff",
+            cursor: "pointer",
+            border: "none",
+            width: "100%",
+          }}
         />
       </div>
     </div>

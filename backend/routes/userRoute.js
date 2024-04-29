@@ -3,12 +3,12 @@ const con = require("../config/dbConnection");
 const router = express.Router();
 const { signupvalidation, loginvalidation } = require("../helpers/validation");
 
-const bodyParser = require('body-parser');
-const app = express();
+// const bodyParser = require('body-parser');
+// const app = express();
 
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: false }));
+// app.use(bodyParser.json());
 
 
 // const { menuvalidation } = require("../helpers/validation");
@@ -83,6 +83,8 @@ const { StatusOrder } = require("../controllers/customer/StatusOrder");
 const { payment, paymentsuccess } = require("../controllers/customer/Paymentdummy");
 const { getPaymentStatus } = require("../controllers/Caterer/PaymentStatus");
 const { orderrequest } = require("../controllers/customer/OrderRequest");
+const { Orderhistory } = require("../controllers/customer/Orderhistory");
+const { Paymentdetails } = require("../controllers/customer/Paymentdetails");
 
 
 
@@ -145,6 +147,9 @@ router.put('/updatecatererprofile', profile.updateCatererDetailes)
   router.post('/payment/success',paymentsuccess);
 
   router.get('/order/:orderId/payment',getPaymentStatus);
+  router.get('/orders/customer/:customerId',Orderhistory);
+
+  router.get('/payments/order',Paymentdetails);
 
 
 

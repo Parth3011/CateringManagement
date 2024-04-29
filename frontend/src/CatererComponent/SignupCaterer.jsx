@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import '../Css/signup.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 export default function SignupCaterer({ datauser }) {
-
   const data = { name: "", email: "", company: "", pwd: "", confirm: "", phone: "", address: "", pincode: "", city: "", state: "" };
   const [inputdata, setinputData] = useState(data);
   const [errors, setErrors] = useState({});
@@ -82,46 +80,98 @@ export default function SignupCaterer({ datauser }) {
     return formIsValid;
   }
 
+  const validate = () => {
+    let formIsValid = true;
+    let newErrors = {};
+
+    // Email validation
+    if (!inputdata.email) {
+      newErrors.email = "Please enter your email address.";
+      formIsValid = false;
+    } else {
+      let pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!pattern.test(inputdata.email)) {
+        newErrors.email = "Please enter a valid email address.";
+        formIsValid = false;
+      }
+    }
+
+    // Password validation
+    if (!inputdata.pwd) {
+      newErrors.pwd = "Please enter your password.";
+      formIsValid = false;
+    } else if (inputdata.pwd.length < 5) {
+      newErrors.pwd = "Password must be at least 5 characters long.";
+      formIsValid = false;
+    }
+
+    // Confirm password validation
+    if (!inputdata.confirm) {
+      newErrors.confirm = "Please confirm your password.";
+      formIsValid = false;
+    } else if (inputdata.pwd !== inputdata.confirm) {
+      newErrors.confirm = "Passwords do not match.";
+      formIsValid = false;
+    }
+
+    setErrors(newErrors);
+    return formIsValid;
+  };
+
   return (
-    <div className='registration'>
-      <h1>Registration Caterer</h1>
-      <div className='box'>
-        <label>Username</label>
-        <input type="text" className='uname' name="name" value={inputdata.name} onChange={handledata} />
-        <span className="error" style={{ color: 'red' }}>{errors.name}</span><br />
+    <div style={{ 
+      height: '150vh',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      background: 'linear-gradient(to bottom right, #c3d1e4, #e5e7eb)',
+    }}>
+      <div style={{ 
+        backgroundColor: 'rgba(255, 255, 255, 0.8)',
+        padding: '20px',
+        borderRadius: '10px',
+        boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
+        width: '800px', // Increased width
+      }}>
+        <h1 style={{ marginBottom: '20px' , fontSize:"50px" }}>Registration Caterer</h1>
+        <form style={{ display: 'flex', flexDirection: 'column' }}>
+          <label style={{ marginBottom: '5px' }}>Username</label>
+          <input type="text" name="name" value={inputdata.name} onChange={handledata} style={{ marginBottom: '10px', padding: '8px', borderRadius: '5px', border: '1px solid #ccc' }} />
+          <span style={{ color: 'red', marginBottom: '10px' }}>{errors.name}</span>
 
-        <label>Email</label>
-        <input type="text" className='email' name="email" value={inputdata.email} onChange={handledata} />
-        <span className="error" style={{ color: 'red' }}>{errors.email}</span><br />
+          <label style={{ marginBottom: '5px' }}>Email</label>
+          <input type="text" name="email" value={inputdata.email} onChange={handledata} onBlur={validate} style={{ marginBottom: '10px', padding: '8px', borderRadius: '5px', border: '1px solid #ccc' }} />
+          <span style={{ color: 'red', marginBottom: '10px' }}>{errors.email}</span>
 
-        <label>Company Name</label>
-        <input type="text" className='company' name="company" value={inputdata.company} onChange={handledata} />
-        <span className="error" style={{ color: 'red' }}>{errors.company}</span><br />
+          <label style={{ marginBottom: '5px' }}>Company Name</label>
+          <input type="text" name="company" value={inputdata.company} onChange={handledata} style={{ marginBottom: '10px', padding: '8px', borderRadius: '5px', border: '1px solid #ccc' }} />
+          <span style={{ color: 'red', marginBottom: '10px' }}>{errors.company}</span>
 
-        <label>Password</label>
-        <input type="password" className='pwd' name="pwd" value={inputdata.pwd} onChange={handledata} />
-        <span className="error" style={{ color: 'red' }}>{errors.pwd}</span><br />
+          <label style={{ marginBottom: '5px' }}>Password</label>
+          <input type="password" name="pwd" value={inputdata.pwd} onChange={handledata} style={{ marginBottom: '10px', padding: '8px', borderRadius: '5px', border: '1px solid #ccc' }} />
+          <span style={{ color: 'red', marginBottom: '10px' }}>{errors.pwd}</span>
 
-        <label>Confirm Password</label>
-        <input type="password" className='confirm' name="confirm" value={inputdata.confirm} onChange={handledata} />
-        <span className="error" style={{ color: 'red' }}>{errors.confirm}</span><br />
+          <label style={{ marginBottom: '5px' }}>Confirm Password</label>
+          <input type="password" name="confirm" value={inputdata.confirm} onChange={handledata} onBlur={validate} style={{ marginBottom: '10px', padding: '8px', borderRadius: '5px', border: '1px solid #ccc' }} />
+          <span style={{ color: 'red', marginBottom: '10px' }}>{errors.confirm}</span>
 
-        <label>Phone No.</label>
-        <input type="number" className='phone' name="phone" value={inputdata.phone} onChange={handledata} /><br />
+          <label style={{ marginBottom: '5px' }}>Phone No.</label>
+          <input type="number" name="phone" value={inputdata.phone} onChange={handledata} style={{ marginBottom: '10px', padding: '8px', borderRadius: '5px', border: '1px solid #ccc' }} />
 
-        <label>Address</label>
-        <textarea className='address' rows="1" name="address" value={inputdata.address} onChange={handledata}></textarea><br />
+          <label style={{ marginBottom: '5px' }}>Address</label>
+          <textarea rows="1" name="address" value={inputdata.address} onChange={handledata} style={{ marginBottom: '10px', padding: '8px', borderRadius: '5px', border: '1px solid #ccc' }}></textarea>
 
-        <label>Pincode</label>
-        <input type="number" className='pin' name="pincode" value={inputdata.pincode} onChange={handledata} /><br />
+          <label style={{ marginBottom: '5px' }}>Pincode</label>
+          <input type="number" name="pincode" value={inputdata.pincode} onChange={handledata} style={{ marginBottom: '10px', padding: '8px', borderRadius: '5px', border: '1px solid #ccc' }} />
 
-        <label>City</label>
-        <input type="text" className='city' name="city" value={inputdata.city} onChange={handledata} /><br />
+          <label style={{ marginBottom: '5px' }}>City</label>
+          <input type="text" name="city" value={inputdata.city} onChange={handledata} style={{ marginBottom: '10px', padding: '8px', borderRadius: '5px', border: '1px solid #ccc' }} />
 
-        <label>State</label>
-        <input type="text" className='state' name="state" value={inputdata.state} onChange={handledata} /><br />
+          <label style={{ marginBottom: '5px' }}>State</label>
+          <input type="text" name="state" value={inputdata.state} onChange={handledata} style={{ marginBottom: '10px', padding: '8px', borderRadius: '5px', border: '1px solid #ccc' }} />
 
-        <input type="submit" className="register bg-success" value="Register Now" onClick={handleSubmit} />
+          <input type="submit" value="Register Now" onClick={handleSubmit} style={{ padding: '10px', backgroundColor: '#007bff', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }} />
+        </form>
       </div>
     </div>
   );
